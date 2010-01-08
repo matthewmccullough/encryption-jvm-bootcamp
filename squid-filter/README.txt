@@ -32,4 +32,6 @@ tail -f /opt/local/var/squid/logs/*
 
 * Set up your browser to use a HTTP proxy server of localhost:3128
 
-*Disable the proxy server and also shut down squid when done
+* Disable the proxy server and also shut down squid when done
+
+* TROUBLESHOOTING: Check the logs for error messages
