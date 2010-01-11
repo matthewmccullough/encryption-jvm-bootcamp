@@ -9,14 +9,15 @@ import java.security.SecureRandom;
  */
 public class SecureRandomNumber 
 {
-    public static void main( String[] args ) throws NoSuchAlgorithmException
-    {
-    		//Do the expensive one time setup of the random number generator instance
-        SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
-        
-        //Get the next random number
-        String randomNum = new Integer( prng.nextInt() ).toString();
-        
-        System.out.println("Random number: " + randomNum);
-    }
+  public static void main( String[] args ) throws NoSuchAlgorithmException
+  {
+    //Do the expensive one time setup of the
+    // random number generator instance
+    SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
+    
+    //Get the next random number
+    String randomNum = new Integer( prng.nextInt() ).toString();
+    
+    System.out.println("Random number: " + randomNum);
+  }
 }
