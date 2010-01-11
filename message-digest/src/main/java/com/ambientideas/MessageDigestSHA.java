@@ -18,8 +18,8 @@ public class MessageDigestSHA
     throws NoSuchAlgorithmException
   {
     //Set up the message to be encoded
-    String message1 = "Four score and seven years ago";
-    String message2 = "Four score and seven tears ago";
+    final String message1 = "Four score and seven years ago";
+    final String message2 = "Four score and seven tears ago";
 	  
     
     System.out.println("Message1 SHA1 digest: "
