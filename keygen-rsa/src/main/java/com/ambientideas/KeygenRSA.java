@@ -1,5 +1,7 @@
 package com.ambientideas;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
@@ -14,20 +16,26 @@ import java.security.SecureRandom;
  */
 public class KeygenRSA 
 {
-  public static void main( String[] args ) throws NoSuchAlgorithmException, NoSuchProviderException
+  public static void main( String[] args ) throws NoSuchAlgorithmException, NoSuchProviderException, IOException
   {
-    KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
+    final KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
     
-    byte[] userSeed = {0x9, 12, 0xA};
-    SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
-    random.setSeed(userSeed);
+    final SecureRandom random = SecureRandom.getInstance("SHA1PRNG", "SUN");
     keyGen.initialize(1024, random);
     
     KeyPair pair = keyGen.generateKeyPair();
     
-    PrivateKey priv = pair.getPrivate();
-    PublicKey pub = pair.getPublic();
+    final PrivateKey priv = pair.getPrivate();
+    final PublicKey pub = pair.getPublic();
     
-    //System.out.println("Random number: " + priv.getEncoded());
+    //Write the private key to a file
+    FileOutputStream privOS = new FileOutputStream("RSAPrivateKey.key");
+    privOS.write(priv.getEncoded());
+    privOS.close();
+    
+  //Write the private key to a file
+    FileOutputStream publicOS = new FileOutputStream("RSAPublicKey.key");
+    publicOS.write(pub.getEncoded());
+    publicOS.close();
   }
 }
