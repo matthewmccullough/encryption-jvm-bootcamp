@@ -7,6 +7,39 @@
   <version>1.0-SNAPSHOT</version>
   <name>secure-random</name>
   <url>http://maven.apache.org</url>
+  <developers>
+  	<developer>
+  		<id>matthew.mccullough</id>
+  		<name>Matthew McCullough</name>
+  		<email>matthewm@ambientideas.com</email>
+  		<url>http://ambientideas.com/blog</url>
+  		<organization>Ambient Ideas, LLC</organization>
+  		<organizationUrl>http://ambientideas.com</organizationUrl>
+  		<timezone>GMT-7</timezone>
+  		<properties>
+  			<HoursContributed>9</HoursContributed>
+  		</properties>
+  		<roles>
+  			<role>Lead</role>
+  		</roles>
+  	</developer>
+  </developers>
+  <contributors>
+  	<contributor>
+  		<name>Tim Berglund</name>
+  		<email>tim.berglund@augusttechgroup.com</email>
+  		<url>http://www.augusttechgroup.com</url>
+  		<organization>August Technology Group</organization>
+  		<organizationUrl>http://www.augusttechgroup.com</organizationUrl>
+  		<timezone>GMT-7</timezone>
+  		<properties>
+  			<HoursContributed>2</HoursContributed>
+  		</properties>
+  		<roles>
+  			<role>Advisor</role>
+  		</roles>
+  	</contributor>
+  </contributors>
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
