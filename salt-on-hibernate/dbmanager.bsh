@@ -1,0 +1,1 @@
+java -cp tools/hsqldb-1.8.0.7.jar org.hsqldb.util.DatabaseManagerSwing --driver "org.hsqldb.jdbcDriver" --url "jdbc:hsqldb:file:src/db/passwordsdb" --user "SA"
