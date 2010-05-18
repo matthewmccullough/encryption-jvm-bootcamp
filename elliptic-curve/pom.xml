@@ -19,14 +19,14 @@
       <artifactId>CoDec</artifactId>
       <version>b17</version>
       <scope>system</scope>
-      <systemPath>${base.dir}/lib/CoDec-build17-jdk13.jar</systemPath>
+      <systemPath>${project.basedir}/lib/CoDec-build17-jdk13.jar</systemPath>
     </dependency>
     <dependency>
       <groupId>cdc.informatik.tu-darmstadt.de</groupId>
       <artifactId>FlexiProvider</artifactId>
       <version>1.6p7</version>
       <scope>system</scope>
-      <systemPath>${base.dir}/lib/FlexiProvider-1.6p7.signed.jar</systemPath>
+      <systemPath>${project.basedir}/lib/FlexiProvider-1.6p7.signed.jar</systemPath>
     </dependency>
   </dependencies>
 </project>
