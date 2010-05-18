@@ -1,0 +1,39 @@
+package com.mycompany.app;
+
+import org.hibernate.Session;
+import java.util.Date;
+import java.util.Properties;
+
+import com.mycompany.app.util.HibernateUtil;
+
+public class EventManager {
+
+    public static void main(String[] args) {
+        EventManager mgr = new EventManager();
+
+        if (args[0].equals("store")) {
+			System.out.println("Creating and storing event...");
+            mgr.createAndStoreEvent("My Event", new Date());
+        } else {
+			System.out.println("Hello World: "+System.getProperty("java.version","Unknown") );
+		}
+
+        HibernateUtil.getSessionFactory().close();
+    }
+
+    private void createAndStoreEvent(String title, Date theDate) {
+		System.out.println("L1");
+        Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		System.out.println("L2");
+        session.beginTransaction();
+		System.out.println("L3");
+        Event theEvent = new Event();
+        theEvent.setTitle(title);
+        theEvent.setDate(theDate);
+
+        session.save(theEvent);
+
+        session.getTransaction().commit();
+    }
+
+}
