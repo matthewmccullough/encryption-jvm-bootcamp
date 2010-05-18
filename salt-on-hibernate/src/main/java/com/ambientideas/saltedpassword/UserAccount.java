@@ -60,4 +60,18 @@ public class UserAccount {
 	public void setEmailAddress(String emailAddress) {
 		this.emailAddress = emailAddress;
 	}
+
+	@Override
+	public String toString() {
+		return "UserAccount ["
+				+ (accountCreationDate != null ? "accountCreationDate="
+						+ accountCreationDate + ", " : "")
+				+ (accountId != null ? "accountId=" + accountId + ", " : "")
+				+ (emailAddress != null ? "emailAddress=" + emailAddress + ", "
+						: "")
+				+ (passwordHash != null ? "passwordHash=" + passwordHash + ", "
+						: "")
+				+ (randomSalt != null ? "randomSalt=" + randomSalt + ", " : "")
+				+ (username != null ? "username=" + username : "") + "]";
+	}
 }
