@@ -1,8 +1,12 @@
 package com.mycompany.app;
 
+import java.util.Date;
+
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
+
+import com.mycompany.app.util.HibernateUtil;
 
 /**
  * Unit test for simple App.
@@ -33,6 +37,8 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+    	EventManager mgr = new EventManager();
+        mgr.createAndStoreEvent("My Event", new Date());
+        HibernateUtil.getSessionFactory().close();
     }
 }

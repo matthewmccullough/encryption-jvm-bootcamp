@@ -21,7 +21,7 @@ public class EventManager {
         HibernateUtil.getSessionFactory().close();
     }
 
-    private void createAndStoreEvent(String title, Date theDate) {
+    public void createAndStoreEvent(String title, Date theDate) {
 		System.out.println("L1");
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		System.out.println("L2");
