@@ -14,7 +14,7 @@ public class UserAccountTest
     public void testApp()
     {
     	UserAccountManager mgr = new UserAccountManager();
-        mgr.createAndStoreUserAccount("johntest.smith", "testsdk23k4j24k", "johntest@smith.com");
+        mgr.createAndStoreUserAccount("johntest.smith", "testmypasswordcleartext", "johntest@smith.com");
         HibernateUtil.getSessionFactory().close();
     }
 }

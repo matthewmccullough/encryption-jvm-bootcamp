@@ -8,11 +8,9 @@ public class UserAccountApp {
         UserAccountManager mgr = new UserAccountManager();
 
         if (args[0].equals("store")) {
-			System.out.println("Creating and storing event...");
-            mgr.createAndStoreUserAccount("john.smith", "sdk23k4j24k", "john@smith.com");
-        } else {
-			System.out.println("Hello World: "+System.getProperty("java.version","Unknown") );
-		}
+            mgr.createAndStoreUserAccount("john.smith", "mypasswordcleartext", "john@smith.com");
+            mgr.createAndStoreUserAccount("bill.webber", "mypasswordcleartext", "bill@webber.com");
+        }
 
         HibernateUtil.getSessionFactory().close();
     }
