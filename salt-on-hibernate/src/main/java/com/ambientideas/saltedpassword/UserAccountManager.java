@@ -17,9 +17,12 @@ public class UserAccountManager {
         UserAccount theNewUser = new UserAccount();
         theNewUser.setUsername(userName);
         
-        String passwordHash = HashUtils.hash(password);
+        String randomSalt = HashUtils.randomSalt();
+        
+        String passwordHash = HashUtils.hash(randomSalt + password);
         theNewUser.setPasswordHash(passwordHash);
         theNewUser.setEmailAddress(emailAddress);
+        theNewUser.setRandomSalt(randomSalt);
         theNewUser.setAccountCreationDate(new Date());
 
         session.save(theNewUser);
@@ -27,7 +30,7 @@ public class UserAccountManager {
         session.getTransaction().commit();
     }
     
-    public boolean validateLoginUserAccount(String userName, String passwordHash, String emailAddress) {
+    public boolean validateLoginUserAccount(String userName, String password, String emailAddress) {
     	boolean loginSuccessful = false;
     	
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
@@ -40,8 +43,11 @@ public class UserAccountManager {
         
         if (ua != null) {
             log.debug(ua);
-        	//Test password
-        	loginSuccessful = true;
+        	//Test password validity
+            String hashWithSalt = HashUtils.hash(ua.getRandomSalt() + password);
+            if (hashWithSalt.equals(ua.getPasswordHash())) {
+        	    loginSuccessful = true;
+            }
         }
         
         return loginSuccessful;
