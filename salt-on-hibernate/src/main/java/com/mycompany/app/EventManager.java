@@ -22,11 +22,8 @@ public class EventManager {
     }
 
     public void createAndStoreEvent(String title, Date theDate) {
-		System.out.println("L1");
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
-		System.out.println("L2");
         session.beginTransaction();
-		System.out.println("L3");
         Event theEvent = new Event();
         theEvent.setTitle(title);
         theEvent.setDate(theDate);
