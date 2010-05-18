@@ -67,6 +67,7 @@
   </dependencies>
   
   <build>
+  	<defaultGoal>exec:java</defaultGoal>
     <plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -81,7 +82,7 @@
 				</executions>
 				<configuration>
 					<mainClass>
-						com.mycompany.app.EventManager
+						com.mycompany.app.UserAccountManager
 					</mainClass>
 					<arguments>
 						<argument>store</argument> <!--  Where are input sources -->

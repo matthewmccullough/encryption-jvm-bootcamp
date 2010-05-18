@@ -9,7 +9,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.hsqldb.jdbcDriver</property>
-        <property name="connection.url">jdbc:hsqldb:file:src/db/passwordsdb</property>
+        <property name="connection.url">jdbc:hsqldb:file:src/db/passwordsdb;shutdown=true</property>
         <property name="connection.username">sa</property>
         <property name="connection.password"></property>
 
@@ -31,7 +31,7 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping resource="Event.hbm.xml"/>
+        <mapping resource="UserAccount.hbm.xml"/>
 
     </session-factory>
 

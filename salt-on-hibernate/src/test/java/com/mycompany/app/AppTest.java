@@ -37,7 +37,7 @@ public class AppTest
      */
     public void testApp()
     {
-    	EventManager mgr = new EventManager();
+    	UserAccountManager mgr = new UserAccountManager();
         mgr.createAndStoreEvent("My Event", new Date());
         HibernateUtil.getSessionFactory().close();
     }

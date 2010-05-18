@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="com.mycompany.app.UserAccount" table="USERACCOUNTS">
+        <id name="accountId" column="ACCOUNT_ID">
+            <generator class="native"/>
+        </id>
+        <property name="accountCreationDate" type="timestamp" column="ACCOUNT_CREATION_DATE"/>
+        <property name="username"/>
+        <property name="passwordHash" column="PASSWORD_HASH"/>
+        <property name="randomSalt" column="RANDOM_SALT"/>
+        <property name="emailAddress" column="EMAIL_ADDRESS"/>
+	</class>
+</hibernate-mapping>

@@ -6,14 +6,14 @@ import java.util.Properties;
 
 import com.mycompany.app.util.HibernateUtil;
 
-public class EventManager {
+public class UserAccountManager {
 
     public static void main(String[] args) {
-        EventManager mgr = new EventManager();
+        UserAccountManager mgr = new UserAccountManager();
 
         if (args[0].equals("store")) {
 			System.out.println("Creating and storing event...");
-            mgr.createAndStoreEvent("My Event", new Date());
+            mgr.createAndStoreUserAccount("john.smith", "sdk23k4j24k", "john@smith.com");
         } else {
 			System.out.println("Hello World: "+System.getProperty("java.version","Unknown") );
 		}
@@ -21,14 +21,16 @@ public class EventManager {
         HibernateUtil.getSessionFactory().close();
     }
 
-    public void createAndStoreEvent(String title, Date theDate) {
+    public void createAndStoreUserAccount(String userName, String passwordHash, String emailAddress) {
         Session session = HibernateUtil.getSessionFactory().getCurrentSession();
         session.beginTransaction();
-        Event theEvent = new Event();
-        theEvent.setTitle(title);
-        theEvent.setDate(theDate);
+        UserAccount theNewUser = new UserAccount();
+        theNewUser.setUsername(userName);
+        theNewUser.setPasswordHash(passwordHash);
+        theNewUser.setEmailAddress(emailAddress);
+        theNewUser.setAccountCreationDate(new Date());
 
-        session.save(theEvent);
+        session.save(theNewUser);
 
         session.getTransaction().commit();
     }
