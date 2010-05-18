@@ -1,4 +1,4 @@
-package com.mycompany.app;
+package com.ambientideas.saltedpassword;
 
 import java.util.Date;
 

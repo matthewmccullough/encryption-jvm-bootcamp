@@ -1,6 +1,6 @@
-package com.mycompany.app;
+package com.ambientideas.saltedpassword;
 
-import com.mycompany.app.util.HibernateUtil;
+import com.ambientideas.saltedpassword.util.HibernateUtil;
 
 public class UserAccountApp {
 

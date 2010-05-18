@@ -1,10 +1,10 @@
-package com.mycompany.app;
+package com.ambientideas.saltedpassword;
 
 import org.hibernate.Session;
 import java.util.Date;
 import java.util.Properties;
 
-import com.mycompany.app.util.HibernateUtil;
+import com.ambientideas.saltedpassword.util.HibernateUtil;
 
 public class UserAccountManager {
     public void createAndStoreUserAccount(String userName, String passwordHash, String emailAddress) {

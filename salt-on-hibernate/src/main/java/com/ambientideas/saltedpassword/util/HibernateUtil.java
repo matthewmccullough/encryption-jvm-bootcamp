@@ -1,4 +1,4 @@
-package com.mycompany.app.util;
+package com.ambientideas.saltedpassword.util;
 
 import org.hibernate.*;
 import org.hibernate.cfg.*;

@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="com.mycompany.app.UserAccount" table="USERACCOUNTS">
+	<class name="com.ambientideas.saltedpassword.UserAccount" table="USERACCOUNTS">
         <id name="accountId" column="ACCOUNT_ID">
             <generator class="native"/>
         </id>

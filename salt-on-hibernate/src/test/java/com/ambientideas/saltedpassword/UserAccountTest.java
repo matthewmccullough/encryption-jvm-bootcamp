@@ -1,8 +1,9 @@
-package com.mycompany.app;
+package com.ambientideas.saltedpassword;
 
 import org.junit.Test;
 
-import com.mycompany.app.util.HibernateUtil;
+import com.ambientideas.saltedpassword.UserAccountManager;
+import com.ambientideas.saltedpassword.util.HibernateUtil;
 
 /**
  * Unit test for simple App.
