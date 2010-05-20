@@ -9,7 +9,7 @@ import sun.misc.BASE64Decoder;
  * Use the SecureRandom java security class to generate
  * a more expensive, but cryptographically secure random number.
  */
-public class Base64Encode 
+public class Base64EncodeSun 
 {
   public static void main( String[] args ) throws IOException {
     final String message1 = "This is <bold>code</bold> with \t tabs, semicolons;"
