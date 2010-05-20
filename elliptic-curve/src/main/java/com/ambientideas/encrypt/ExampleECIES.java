@@ -20,7 +20,7 @@ import de.flexiprovider.ec.parameters.CurveParams;
 import de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP160r1;
 
 /*
- * Original Code (with mistakes and typos that don't allow it to function):
+ * Inspiration code, with mistakes and typos that prevented it from functioning:
  * http://www.cdc.informatik.tu-darmstadt.de/flexiprovider/examples/ExampleECIES.html
  *
  * FlexiProvider JCE Libs:
