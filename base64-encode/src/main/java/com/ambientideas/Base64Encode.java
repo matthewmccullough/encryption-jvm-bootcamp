@@ -16,12 +16,11 @@ public class Base64Encode
     + " and alert-bells \b that could cause escaping issues if not encoded in Base64";
     
     System.out.println("Raw text:\r\n" + message1 + "\r\n");
+    
     BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     String base64Encoded = b64e.encode(message1.getBytes());
-
     System.out.println("Base64 encoded text:\r\n" + base64Encoded + "\r\n");
     
-    //System.out.println("Base64 Decoded text: " + decryptedText);
     BASE64Decoder b64d = new sun.misc.BASE64Decoder();
     String base64Decoded = new String(b64d.decodeBuffer(base64Encoded));
     
