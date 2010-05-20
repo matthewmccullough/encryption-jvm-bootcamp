@@ -37,6 +37,11 @@ public class ExampleECIES {
 		Security.addProvider(new FlexiECProvider());
 		
 		//Get an instance of the FlexiEC provider's ECIES KPG
+		/*
+		 * NOTE: The KeyPairGenerator can be requested with the provider
+		 * or without the provider. Without the provider explicitly specified,
+		 * the search-order of providers in the Java.security file is honored.
+		 */
 //		KeyPairGenerator kpg = KeyPairGenerator.getInstance("ECIES", "FlexiEC");
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance("ECIES");
 
