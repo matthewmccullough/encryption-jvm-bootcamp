@@ -1,0 +1,7 @@
+#http://python.projects.postgresql.org/pldocs/pgcrypto.html
+#Log in to the test encryption database.
+#Username and password are: mccm06/mccm06
+psql testencryption --username mccm06 -a -c "select GEN_SALT('xdes')"
+psql testencryption --username mccm06 -a -c "select GEN_SALT('des')"
+psql testencryption --username mccm06 -a -c "select GEN_SALT('md5')"
+psql testencryption --username mccm06 -a -c "select GEN_SALT('bf')"
