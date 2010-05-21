@@ -1,0 +1,1160 @@
+http://www.dreamincode.net/forums/topic/27950-steganography/
+
+Steganography
+
+Steganography  is a complex subject, please note that although it involves hiding messages, it is not cryptography.   The definitions are as follows:
+
+Cryptography:  “The discipline which embodies principles, means and methods for the transformation of data in order to hide its information content, prevent its undetected modification, or prevent its unauthorized use” 
+
+Steganography: “A method of hiding a secret message inside of other data.”
+
+Essentially the difference is that, while both hide a message, steganography is meant to make the message invisible, while cryptography changes the message’s form, by means of replacement and/or algorithm.
+
+This code is written in Java, and the following topics will need to be understood, before properly understanding how this method works:
+Bytes: individually as integers and as arrays
+Bit Operations:  Logical AND (&), OR(|) and how they work
+Images: BufferedImage specifically
+ImageIO: how image files are opened and saved
+Graphics2D:  accessing user space image properties
+Raster: specifically WritableRaster allows access to the buffer
+DataBufferByte: Buffer used with BufferedImage
+*These are the major topics needed to understand Steganography, but there are others used and assumed to be understood, as this topic is not meant for those inexperienced with the Java language.
+
+
+Bytes:
+Bytes are the elementary data source of most applications, and many programmers will [i]never[/i] use them in any source code, but that is beside the point.  A byte is made of bits, 1s and 0s, 8 of them to be exact.  And the 8 0s and 1s have a decimal value, it is simply a case of transforming the binary (base 2) into decimal (base 10).
+Value by position:  128 64 32 16 8 4 2 1 (and all positions with a 1 are added together)
+Examples:
+00000000 = 0
+00000010 = 2
+00000111 = 7
+00001011 = 11
+And so on…
+
+A byte can be transformed from an int in java by simple casting:
+[il]Byte b = (byte)7;[/il]
+Most classes in java have a method for returning the byte[] of an object, either as a section of the object or the entire object.
+String Class Example:
+
+String w = “William”;
+Byte[] b = w.getBytes();
+
+Where b[0] will now contain the ascii value for ‘W’ 87 if printed.  Though it is good to remember that although it appears as an int, when displayed, it is in fact a byte, which is stored as 8 bits, in this case: 01010111.
+
+
+Bit Operations:
+There are simple operations which most computer users have either heard of, or even used:
+AND:
+The AND(&) bit operator, will AND 2 bytes together. The same rules apply as when using true and false values, where 1 = true, and 0 = false.  If both bytes have a 1 in the same position, then the result for that position is a 1, otherwise the result is a 0.
+
+Example:
+01010111 = 87
+01100101 = 101
+01000101 = 69
+
+[il]Byte b = 87 & 101; //69: 01000101[/il]
+
+OR:
+The OR(|) bit operator, will OR 2 bytes together. The same rules as with AND where 1 = true, and 0 = false, only when using OR, as long as one of the bits in the position is a 1, then the result is a 1.  Only if both bits are 0, is the result a 0.
+
+Example:
+01010111 = 87
+01100101 = 101
+01110111 = 119
+
+[il]Byte b = 87 | 101; //119: 01110111[/il]
+
+On top of these basic operations, we can also shift bits:
+Left Shift:
+An important thing to remember when left shifting bits, is if the first bit is not a 1, a single left shift will essentially double the value.  What actually happens, is a 0 is added on the right hand side of the bits, then the far left bit is removed thus leaving a new set of 8 bits.  Also, when shifting in Java, a number of positions to shift must also be supplied.  If the value is greater than 1, the process is simply repeated that many times each time beginning with the result of the previous shift.  Thus any value will become 0 if shifted 8 times.
+
+Examples:
+(single shift)
+01010111 = 87
+<< 1
+10101110 = 174
+
+(double shift)
+01010111 = 87
+<< 2
+01011100 = 92
+
+
+Byte b1 = 87 << 1; //174: 10101110
+Byte b2 = 87 << 2; //92: 01011100
+
+
+Right Shift:
+A right shift is the opposite of a left shift in the sense that a 0 is added to the left side of the bits, and the far right bit is removed, once again leaving a set of 8 bits.
+
+Examples:
+(single shift)
+01010111 = 87
+>>> 1
+00101011 = 43
+
+(double shift)
+01010111 = 87
+>>> 2
+00010101 = 21
+
+
+byte b1 = 87 >>> 1; //43: 00101011
+byte b2 = 87 >>> 2; //21: 00010101
+
+These are the bit and byte operations which are used to effectively create this steganography application, I will provide some more complex examples, breaking down the steps of adding the data to the image, a little later.
+
+BufferedImage:
+A bufferedImage is something to  be comfortable with when dealing with images.  They are easily used with the newly introduced ImageIO class of Java 1.5.0 as well as containing  methods for accessing the raster and buffer of the image, which makes image editing much easier.  The basic actions for creating a new image are:
+
+BufferedImage img  = new BufferedImage(int, int, int);
+
+File file = new File(String);
+BufferedImage img  = ImageIO.read(file);
+
+
+ImageIO:
+A useful class to handle IO operations on images.  This class has much to offer, but as far as this program is concerned, the read() and write() methods will be sufficient.
+
+Graphics2D:
+A class which has been around for a long time as far as Java is concerned, and allows access to some of the more in depth aspects of graphics/images.  Allows for creating editable areas in a new image or an image which already exists.  As well as allowing a way to reach the renderable area of the image.  This class also allows for an easy switch from image space to user space, which is necessary when modifying or reading certain bytes of an image.
+
+WritableRaster:
+This by definition is the process of rendering an image pixel by pixel, which comes in handy when you need to access the bytes of an image, that are representing pixels.  WritableRaster is a sub-class of Raster itself, which has methods to access the buffer of an image more directly.
+
+DataBufferByte:
+The form of a byte[] buffer for an image.
+
+*These topics/classes will be useful to know and have experience with as you attempt to modify this application, or create similar applications of your own.
+
+
+The Program:
+There are a few specific methods that should be gone over, including the complex bit operations to add the data seamlessly into the image to properly understand the how and why behind this code.
+
+User Space:
+
+private BufferedImage user_space(BufferedImage image)
+{
+	BufferedImage new_img  = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+	Graphics2D      graphics   = new_img.createGraphics();
+	graphics.drawRenderedImage(image, null);
+	graphics.dispose(); 
+	return new_img;
+}
+
+-To make the switch into user space (this is the actual term) a new image is created the same size as the original, and a graphics area is created in it.
+-The original image is then rendered/drawn onto the new image
+-As an added memory benefit, the resources used by the new image are released
+
+That’s it, the new image is now completely in user space, this means that all of the data is created and thus can be modified in Java.  There are issues with trying to modify an image directly, the changes are not always applied.  It is also advisable to create this user space as a new copy of the original image, thus ensuring there is no resource sharing between the original and user space version which may impede the saving of your changes.
+
+Bit Conversion:
+
+private byte[] bit_conversion(int i)
+{        
+        	byte byte3 = (byte)((i & 0xFF000000) >>> 24); 
+        	byte byte2 = (byte)((i & 0x00FF0000) >>> 16); 
+        	byte byte1 = (byte)((i & 0x0000FF00) >>> 8 ); 
+        	byte byte0 = (byte)((i & 0x000000FF)       );
+        	return(new byte[]{byte3,byte2,byte1,byte0});
+ }
+
+I thought it important to explain this operation.  This method could just as easily be written as:
+
+private byte[] bit_conversion(int i)
+{
+return(new byte[]{0,0,0, (byte)(i & 0x000000FF));
+ }
+
+Because a byte holds a max value of 127, all shifts of 8 and higher, will remove all bits and replace them with zeros, but to be proper, to save each set of bits, the implementation is left as calculating each byte.
+*Note that hex FF = 11111111 in binary this is important, because, if there were more than 8 bits, say 16 and let i = 287:
+
+0000000100011111 = 287
+0000000011111111 =  255 or 0x00FF
+0000000000011111 = 31
+
+The result has the last 8 bits matching I, but the first 8 bits were all removed to 0s due to being AND with 0s in all positions, but the last 8.  The thing to take from this, is we can force a value to 0, by ANDing with 0, and leave a value alone, by ANDing with 1.
+
+Encode Text:
+
+private byte[] encode_text(byte[] image, byte[] addition, int offset)
+{
+if(addition.length + offset > image.length)
+{
+throw new IllegalArgumentException("File not long enough!");
+}
+for(int i=0; i<addition.length; ++i)
+ 	{
+            		int add = addition[i];
+            		for(int bit=7; bit>=0; --bit, ++offset)
+            		{
+               	 	int b = (add >>> bit) & 1;
+               		 image[offset] = (byte)((image[offset] & 0xFE) | b );
+            		}
+}
+}
+
+At first this can appear overwhelming, the task of doing it nearly drove me insane, until I had read on countless websites and forums about classic implementations of steganography and how to split up and place the bits.
+In a byte, the bits have a rank, the left most bit is the most significant  and right most, least significant.  This gives us the key, if we need to change some data in this image, we want it to be as unobtrusive as possible, or even invisible.  Thus we want to apply our changes to the least significant bit of some of the bytes.   In this way we change each byte, a maximum of 1 in value.
+Here is how this code accomplishes that:
+[il] for(int i=0; i<addition.length; ++i)[/il] – loops through each byte of the addition array
+[il] int add = addition[i];[/il] – assigns add to be the current byte
+[il] for(int bit=7; bit>=0; --bit, ++offset)[/il] – loops through the 8 bits of the byte stored in add
+[il] int b = (add >>> bit) & 1;[/il] – b is assigned the value of the byte add shifted right bit positions AND 1
+This may look complicated, but the end result is a loop which systematically assigns b the next single bit value of the byte add, either 0, or 1.  This is best seen in a set of examples:
+
+We will start with [il] int b = (add >>> bit);[/il] only, Say:
+add = 87 = 01010111
+
+First loop through, bit = 7:
+01010111 = 87
+>>> 7
+00000000 = 0
+
+Next time, bit = 6:
+01010111 = 87
+>>> 6
+00000001 = 1
+
+Next time, bit = 5:
+01010111 = 87
+>>> 5
+00000010 = 2
+
+Next time, bit = 4:
+01010111 = 87
+>>> 4
+00000101 = 5
+
+… and so on.
+*Notice how the right bits match the left bits of add, in a growing number based on how many positions we shift add.
+
+Now to apply the [il]& 1[/il]:
+First loop:
+00000000 = 0
+00000001 = 1
+00000000 = 0 = b
+
+Next:
+00000001 = 1
+00000001 = 1
+00000001 = 1 = b
+
+Next:
+00000010 = 2
+00000001 = 1
+00000000 = 0 = b
+
+Next:
+00000101 = 5
+00000001 = 1
+00000001 = 1 = b
+
+Note the pattern, b is assigned the value 0 or 1, based on the last bit of the shifted add byte.  We accomplish the same as above, by ANDing by 1, which clears all bits to 0, except the last which is left as it was.  This means that b’s value represents the bit at position bit in the for loop. 
+
+[il] image[offset] = (byte)((image[offset] & 0xFE) | b );[/il]
+This line of code works in a similar way. 0xFE is hex, which represents 11111110 in binary.  By reasoning above, this will leave the first 7 bits as is, and clear the least significant bit to 0. Then with the last bit 0, we OR it with b, which is either: 00000000 or 00000001.  This will set the last bit to match the value stored in b.  As the OR operation with 0s will not change any of the first 7 bits, and thus knowing the last bit is a 0, the value in this position of b, is guaranteed to be placed into this position, whether it be 0 or 1.
+
+*The code advances the offset value as the loop continues as well, thus the 8 bits of a single byte of addition are separated across the 8 least significant bits of 8 separate and sequential bytes of the image.
+**Also it is important that we encode the length first, and do it in a static way, eg. It is saved in 4 bytes, or the first 32 least significant bits.  Thus we know how many least significant bits to read after the length to retrieve the entire message.
+
+Decode Text:
+
+private byte[] decode_text(byte[] image)
+{
+int length = 0;
+        	int offset = 32;
+        	for(int i=0; i<32; ++i)
+        	{
+            		length = (length << 1) | (image[i] & 1);
+    	}
+        	byte[] result = new byte[length];
+        	for(int b=0; b<result.length; ++b )
+        	{
+            		for(int i=0; i<8; ++i, ++offset)
+            		{
+                		result = (byte)((result << 1) | (image[offset] & 1));
+            		}
+        	}
+        	return result;
+}
+
+The process may seem straight forward, but I will explain how each step works to retrieve the bits we encoded.
+
+[il] int offset = 32;[/il] – The length of the message is stored as a 4 byte number, or 32 bits, thus the message starts after 32 bytes of image.
+[il] for(int i=0; i<32; ++i)[/il] – Since the first 32 bytes contain 1 bit each of our length, we must loop all 32 bytes to retrieve the length.
+[il] length = (length << 1) | (image[i] & 1);[/il] – We shift the bits of length left by 1, then OR it with a result of the least significant bit of the image byte.   (& 1) will clear all bits, except the last bit, which will be left as is. Thus as bits are added, they are moved along and placed into the newly empty least significant slot of length.
+
+*For the same reason as the bit conversion array being {0,0,0,byte0}, this for loop could use i=24, and will still work.  Both of these things have not been placed into the final code, as leaving the larger ranges, allows for expansion and much larger text to be hidden in the image.
+
+[il] for(int b=0; b<result.length; ++b ) [/il] – Now that we have a length and have created a byte array to hold the bits, we loop through that many image bytes.
+
+[il] for(int i=0; i<8; ++i, ++offset)[/il] – Again we must loop through the 8 bits of a byte to be collected.
+
+[il] result = (byte)((result << 1) | (image[offset] & 1));[/il] – the resulting array of bytes is made up of the least significant bit of each sequential byte. This is retrieved in the same way as we retrieved the length, now that the loops are properly setup.
+
+
+*******
+That explains the magic of how Steganography works.   Of course there are other ways to implement it, and in fact, most often the text is encrypted before it is hidden to decrease it’s chances of being detected and/or broken.  The more randomness there is in the image, the easier it is to add data to the image without any detection, but even so, the following 2 images are an original(left) and a modified(right).  Without knowing there was a message in the second, you would be hard pressed to figure it out on your own.  Also most often the recipient of a steganographic image would never see the original to compare.
+[img]name.png [/img] [img]steganography.png [/img]
+*******
+
+
+FULL PROGRAM:
+
+Code Statistics:
+-Fully commented in JavaDoc format.
+-File size is not increased greatly.
+-Output file is of type .png
+-Both .jpg and .png input files have been tested successfully.
+-The image is not distorted in any visible way.
+-Due to the complexity of the encoding, the message cannot be viewed by simply looking at the image in a text editor, such as Notepad.
+
+This program is done in a Model, View, Controller style.  The Controller file is the one which contains a main method, but all 3 files are necessary to use the application.
+
+Model: Steganography.java
+ 
+/*
+ *@author  William_Wilson
+ *@version 1.6
+ *Created: May 8, 2007
+ */
+
+/*
+ *import list
+ */
+import java.io.File;
+
+import java.awt.Point;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.awt.image.DataBufferByte;
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+
+/*
+ *Class Steganography
+ */
+public class Steganography
+{
+	
+	/*
+	 *Steganography Empty Constructor
+	 */
+	public Steganography()
+	{
+	}
+	
+	/*
+	 *Encrypt an image with text, the output file will be of type .png
+	 *@param path         The path (folder) containing the image to modify
+	 *@param original    The name of the image to modify
+	 *@param ext1          The extension type of the image to modify (jpg, png)
+	 *@param stegan      The output name of the file
+	 *@param message  The text to hide in the image
+	 *@param type	  integer representing either basic or advanced encoding
+	 */
+	public boolean encode(String path, String original, String ext1, String stegan, String message)
+	{
+		String			file_name 	= image_path(path,original,ext1);
+		BufferedImage 	image_orig	= getImage(file_name);
+		
+		//user space is not necessary for Encrypting
+		BufferedImage image = user_space(image_orig);
+		image = add_text(image,message);
+		
+		return(setImage(image,new File(image_path(path,stegan,"png")),"png"));
+	}
+	
+	/*
+	 *Decrypt assumes the image being used is of type .png, extracts the hidden text from an image
+	 *@param path   The path (folder) containing the image to extract the message from
+	 *@param name The name of the image to extract the message from
+	 *@param type integer representing either basic or advanced encoding
+	 */
+	public String decode(String path, String name)
+	{
+		byte[] decode;
+		try
+		{
+			//user space is necessary for decrypting
+			BufferedImage image  = user_space(getImage(image_path(path,name,"png")));
+			decode = decode_text(get_byte_data(image));
+			return(new String(decode));
+		}
+        catch(Exception e)
+        {
+			JOptionPane.showMessageDialog(null, 
+				"There is no hidden message in this image!","Error",
+				JOptionPane.ERROR_MESSAGE);
+			return "";
+        }
+    }
+    
+	/*
+	 *Returns the complete path of a file, in the form: path\name.ext
+	 *@param path   The path (folder) of the file
+	 *@param name The name of the file
+	 *@param ext      The extension of the file
+	 *@return A String representing the complete path of a file
+	 */
+	private String image_path(String path, String name, String ext)
+	{
+		return path + "/" + name + "." + ext;
+	}
+	
+	/*
+	 *Get method to return an image file
+	 *@param f The complete path name of the image.
+	 *@return A BufferedImage of the supplied file path
+	 *@see    Steganography.image_path
+	 */
+	private BufferedImage getImage(String f)
+	{
+		BufferedImage 	image	= null;
+		File 		file 	= new File(f);
+		
+		try
+		{
+			image = ImageIO.read(file);
+		}
+		catch(Exception ex)
+		{
+			JOptionPane.showMessageDialog(null, 
+				"Image could not be read!","Error",JOptionPane.ERROR_MESSAGE);
+		}
+		return image;
+	}
+	
+	/*
+	 *Set method to save an image file
+	 *@param image The image file to save
+	 *@param file      File  to save the image to
+	 *@param ext      The extension and thus format of the file to be saved
+	 *@return Returns true if the save is succesful
+	 */
+	private boolean setImage(BufferedImage image, File file, String ext)
+	{
+		try
+		{
+			file.delete(); //delete resources used by the File
+			ImageIO.write(image,ext,file);
+			return true;
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, 
+				"File could not be saved!","Error",JOptionPane.ERROR_MESSAGE);
+			return false;
+		}
+	}
+	
+	/*
+	 *Handles the addition of text into an image
+	 *@param image The image to add hidden text to
+	 *@param text     The text to hide in the image
+	 *@return Returns the image with the text embedded in it
+	 */
+	private BufferedImage add_text(BufferedImage image, String text)
+	{
+		//convert all items to byte arrays: image, message, message length
+		byte img[]  = get_byte_data(image);
+		byte msg[] = text.getBytes();
+		byte len[]   = bit_conversion(msg.length);
+		try
+		{
+			encode_text(img, len,  0); //0 first positiong
+			encode_text(img, msg, 32); //4 bytes of space for length: 4bytes*8bit = 32 bits
+		}
+		catch(Exception e)
+		{
+			JOptionPane.showMessageDialog(null, 
+"Target File cannot hold message!", "Error",JOptionPane.ERROR_MESSAGE);
+		}
+		return image;
+	}
+	
+	/*
+	 *Creates a user space version of a Buffered Image, for editing and saving bytes
+	 *@param image The image to put into user space, removes compression interferences
+	 *@return The user space version of the supplied image
+	 */
+	private BufferedImage user_space(BufferedImage image)
+	{
+		//create new_img with the attributes of image
+		BufferedImage new_img  = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		Graphics2D    graphics = new_img.createGraphics();
+		graphics.drawRenderedImage(image, null);
+		graphics.dispose(); //release all allocated memory for this image
+		return new_img;
+	}
+	
+	/*
+	 *Gets the byte array of an image
+	 *@param image The image to get byte data from
+	 *@return Returns the byte array of the image supplied
+	 *@see Raster
+	 *@see WritableRaster
+	 *@see DataBufferByte
+	 */
+	private byte[] get_byte_data(BufferedImage image)
+	{
+		WritableRaster raster   = image.getRaster();
+		DataBufferByte buffer = (DataBufferByte)raster.getDataBuffer();
+		return buffer.getData();
+	}
+	
+	/*
+	 *Gernerates proper byte format of an integer
+	 *@param i The integer to convert
+	 *@return Returns a byte[4] array converting the supplied integer into bytes
+	 */
+	private byte[] bit_conversion(int i)
+	{
+		//originally integers (ints) cast into bytes
+		//byte byte7 = (byte)((i & 0xFF00000000000000L) >>> 56);
+		//byte byte6 = (byte)((i & 0x00FF000000000000L) >>> 48);
+		//byte byte5 = (byte)((i & 0x0000FF0000000000L) >>> 40);
+		//byte byte4 = (byte)((i & 0x000000FF00000000L) >>> 32);
+		
+		//only using 4 bytes
+		byte byte3 = (byte)((i & 0xFF000000) >>> 24); //0
+		byte byte2 = (byte)((i & 0x00FF0000) >>> 16); //0
+		byte byte1 = (byte)((i & 0x0000FF00) >>> 8 ); //0
+		byte byte0 = (byte)((i & 0x000000FF)       );
+		//{0,0,0,byte0} is equivalent, since all shifts >=8 will be 0
+		return(new byte[]{byte3,byte2,byte1,byte0});
+	}
+	
+	/*
+	 *Encode an array of bytes into another array of bytes at a supplied offset
+	 *@param image     Array of data representing an image
+	 *@param addition Array of data to add to the supplied image data array
+	 *@param offset      The offset into the image array to add the addition data
+	 *@return Returns data Array of merged image and addition data
+	 */
+	private byte[] encode_text(byte[] image, byte[] addition, int offset)
+	{
+		//check that the data + offset will fit in the image
+		if(addition.length + offset > image.length)
+		{
+			throw new IllegalArgumentException("File not long enough!");
+		}
+		//loop through each addition byte
+		for(int i=0; i<addition.length; ++i)
+		{
+			//loop through the 8 bits of each byte
+			int add = addition[i];
+			for(int bit=7; bit>=0; --bit, ++offset) //ensure the new offset value carries on through both loops
+			{
+				//assign an integer to b, shifted by bit spaces AND 1
+				//a single bit of the current byte
+				int b = (add >>> bit) & 1;
+				//assign the bit by taking: [(previous byte value) AND 0xfe] OR bit to add
+				//changes the last bit of the byte in the image to be the bit of addition
+				image[offset] = (byte)((image[offset] & 0xFE) | b );
+			}
+		}
+		return image;
+	}
+    
+	/*
+	 *Retrieves hidden text from an image
+	 *@param image Array of data, representing an image
+	 *@return Array of data which contains the hidden text
+	 */
+	private byte[] decode_text(byte[] image)
+	{
+		int length = 0;
+		int offset  = 32;
+		//loop through 32 bytes of data to determine text length
+		for(int i=0; i<32; ++i) //i=24 will also work, as only the 4th byte contains real data
+		{
+			length = (length << 1) | (image[i] & 1);
+		}
+		
+		byte[] result = new byte[length];
+		
+		//loop through each byte of text
+		for(int b=0; b<result.length; ++b )
+		{
+			//loop through each bit within a byte of text
+			for(int i=0; i<8; ++i, ++offset)
+			{
+				//assign bit: [(new byte value) << 1] OR [(text byte) AND 1]
+				result = (byte)((result << 1) | (image[offset] & 1));
+			}
+		}
+		return result;
+	}
+}
+
+
+View (GUI): Staganography_View.java
+*It is a very simple GUI, no threads, and no fancy options, feel free to add elements such as opening text files, and other useful items.
+
+/*
+ *@author William_Wilson
+ *@version 1.0
+ *Created May 10, 2007
+ */
+
+/*
+ *Import List
+ */
+import java.awt.Color;
+import java.awt.Insets;
+import java.awt.Container;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+
+import javax.swing.JMenu;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.BorderFactory;
+
+/*
+ *Class Steganography_View
+ */
+public class Steganography_View extends JFrame
+{
+	//sie variables for window
+	private static int WIDTH  = 500;
+	private static int HEIGHT = 400;
+	
+	//elements for JPanel
+	private JTextArea 	input;
+	private JScrollBar 	scroll,scroll2;
+	private JButton		encodeButton,decodeButton;
+	private JLabel		image_input;
+	
+	//elements for Menu
+	private JMenu 		file;
+	private JMenuItem 	encode;
+	private JMenuItem 	decode;
+	private JMenuItem 	exit;
+	
+	/*
+	 *Constructor for Steganography_View class
+	 *@param name Used to set the title on the JFrame
+	 */
+	public Steganography_View(String name)
+	{
+		//set the title of the JFrame
+		super(name);
+		
+		//Menubar
+		JMenuBar menu = new JMenuBar();
+		
+		JMenu file = new JMenu("File");	file.setMnemonic('F');
+		encode = new JMenuItem("Encode"); encode.setMnemonic('E'); file.add(encode);
+		decode = new JMenuItem("Decode"); decode.setMnemonic('D'); file.add(decode);
+		file.addSeparator();
+		exit = new JMenuItem("Exit"); exit.setMnemonic('x'); file.add(exit);
+		
+		menu.add(file);
+		setJMenuBar(menu);
+		
+		// display rules
+		setResizable(true);						//allow window to be resized: true?false
+		setBackground(Color.lightGray);			//background color of window: Color(int,int,int) or Color.name
+		setLocation(100,100);					//location on the screen to display window
+        		setDefaultCloseOperation(EXIT_ON_CLOSE);//what to do on close operation: exit, do_nothing, etc
+        		setSize(WIDTH,HEIGHT);					//set the size of the window
+        		setVisible(true);						//show the window: true?false
+	}
+	
+	/*
+	 *@return The menu item 'Encode'
+	 */
+	public JMenuItem	getEncode()		{ return encode;		}
+	/*
+	 *@return The menu item 'Decode'
+	 */
+	public JMenuItem	getDecode()		{ return decode;		}
+	/*
+	 *@return The menu item 'Exit'
+	 */
+	public JMenuItem	getExit()		{ return exit;			}
+	/*
+	 *@return The TextArea containing the text to encode
+	 */
+	public JTextArea	getText()		{ return input;			}
+	/*
+	 *@return The JLabel containing the image to decode text from
+	 */
+	public JLabel		getImageInput()	{ return image_input;		}
+	/*
+	 *@return The JPanel displaying the Encode View
+	 */
+	public JPanel		getTextPanel()		{ return new Text_Panel();	}
+	/*
+	 *@return The JPanel displaying the Decode View
+	 */
+	public JPanel		getImagePanel()	{ return new Image_Panel();	}
+	/*
+	 *@return The Encode button
+	 */
+	public JButton		getEButton()		{ return encodeButton;		}
+	/*
+	 *@return The Decode button
+	 */
+	public JButton 		getDButton()		{  return decodeButton;		}
+	
+	/*
+	 *Class Text_Panel
+	 */
+	private class Text_Panel extends JPanel
+	{
+		/*
+		 *Constructor to enter text to be encoded
+		 */
+		public Text_Panel()
+		{
+			//setup GridBagLayout
+			GridBagLayout layout = new GridBagLayout(); 
+			GridBagConstraints layoutConstraints = new GridBagConstraints(); 
+			setLayout(layout);
+			
+			input = new JTextArea();
+			layoutConstraints.gridx 	= 0; layoutConstraints.gridy = 0; 
+			layoutConstraints.gridwidth = 1; layoutConstraints.gridheight = 1; 
+			layoutConstraints.fill 		= GridBagConstraints.BOTH; 
+			layoutConstraints.insets 	= new Insets(0,0,0,0); 
+			layoutConstraints.anchor 	= GridBagConstraints.CENTER; 
+			layoutConstraints.weightx 	= 1.0; layoutConstraints.weighty = 50.0;
+			JScrollPane scroll = new JScrollPane(input,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+			layout.setConstraints(scroll,layoutConstraints);
+			scroll.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+	    		add(scroll);
+	    	
+	    		encodeButton = new JButton("Encode Now");
+	    		layoutConstraints.gridx 	= 0; layoutConstraints.gridy = 1; 
+			layoutConstraints.gridwidth = 1; layoutConstraints.gridheight = 1; 
+			layoutConstraints.fill 		= GridBagConstraints.BOTH; 
+			layoutConstraints.insets 	= new Insets(0,-5,-5,-5); 
+			layoutConstraints.anchor 	= GridBagConstraints.CENTER; 
+			layoutConstraints.weightx 	= 1.0; layoutConstraints.weighty = 1.0;
+			layout.setConstraints(encodeButton,layoutConstraints);
+	    		add(encodeButton);
+	    	
+	    		//set basic display
+			setBackground(Color.lightGray);
+			setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		}
+	}
+	
+	/*
+	 *Class Image_Panel
+	 */
+	private class Image_Panel extends JPanel
+	{
+		/*
+		 *Constructor for displaying an image to be decoded
+		 */
+		public Image_Panel()
+		{
+			//setup GridBagLayout
+			GridBagLayout layout = new GridBagLayout(); 
+			GridBagConstraints layoutConstraints = new GridBagConstraints(); 
+			setLayout(layout);
+			
+			image_input = new JLabel();
+			layoutConstraints.gridx 	= 0; layoutConstraints.gridy = 0; 
+			layoutConstraints.gridwidth = 1; layoutConstraints.gridheight = 1; 
+			layoutConstraints.fill 		= GridBagConstraints.BOTH; 
+			layoutConstraints.insets 	= new Insets(0,0,0,0); 
+			layoutConstraints.anchor 	= GridBagConstraints.CENTER; 
+			layoutConstraints.weightx 	= 1.0; layoutConstraints.weighty = 50.0;
+			JScrollPane scroll2 = new JScrollPane(image_input,JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+			JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+			layout.setConstraints(scroll2,layoutConstraints);
+			scroll2.setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+			image_input.setHorizontalAlignment(JLabel.CENTER);
+	    		add(scroll2);
+	    	
+	    		decodeButton = new JButton("Decode Now");
+	    		layoutConstraints.gridx 	= 0; layoutConstraints.gridy = 1; 
+			layoutConstraints.gridwidth = 1; layoutConstraints.gridheight = 1; 
+			layoutConstraints.fill 		= GridBagConstraints.BOTH; 
+			layoutConstraints.insets 	= new Insets(0,-5,-5,-5); 
+			layoutConstraints.anchor 	= GridBagConstraints.CENTER; 
+			layoutConstraints.weightx 	= 1.0; layoutConstraints.weighty = 1.0;
+			layout.setConstraints(decodeButton,layoutConstraints);
+	    		add(decodeButton);
+	    	
+	    		//set basic display
+			setBackground(Color.lightGray);
+			setBorder(BorderFactory.createLineBorder(Color.BLACK,1));
+		 }
+	 }
+}
+
+
+Image Filter: Image_Filter.java:
+
+/*
+ *@author William_Wilson
+ *@version 2.0
+ *Created May 10, 2007
+ */
+
+/*
+ *Import List
+ */
+import java.io.*; 
+
+/*
+ *Image_Filter Class
+ */
+public class Image_Filter extends javax.swing.filechooser.FileFilter
+{
+	/*
+	 *Determines if the extension is of the defined types
+	 *@param ext Extension of a file
+	 *@return Returns true if the extension is 'jpg' or 'png'
+	 */
+	protected boolean isImageFile(String ext)
+	{
+		return (ext.equals("jpg")||ext.equals("png"));
+	}
+	
+	/*
+	 *Determines if the file is a directory or accepted extension
+	 *@param f The File to run the directory/proper extension check on
+	 *@return Returns true if the File is a directory or accepted extension
+	 */
+	public boolean accept(File f)
+	{
+	    if (f.isDirectory())
+	    {
+			return true;
+	    }
+
+	    String extension = getExtension(f);
+		if (extension.equals("jpg")||extension.equals("png"))
+		{
+			return true;
+		}
+		return false;
+	}
+	
+	/*
+	 *Supplies File type description
+	 *@return Returns the String description
+	 */
+	public String getDescription()
+	{
+		return "Supported Image Files";
+	}
+	
+	/*
+	 *Determines the Extension
+	 *@param f File to return the extension of
+	 *@return Returns the String representing the extension
+	 */
+	protected static String getExtension(File f)
+	{
+		String s = f.getName();
+		int i = s.lastIndexOf('.');
+		if (i > 0 &&  i < s.length() - 1) 
+			return s.substring(i+1).toLowerCase();
+		return "";
+	}	
+}
+
+
+Controller (Main Method): Staganography_Controller.java
+
+/*
+ *@author William_Wilson
+ *@version 1.0
+ *Created May 12, 2007
+ */
+
+/*
+ *Import List
+ */
+import java.io.File;
+
+import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.image.BufferedImage;
+import java.awt.event.ActionListener;
+
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import javax.swing.JMenuItem;
+import javax.swing.JTextArea;
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
+import javax.swing.JFileChooser;
+
+/*
+ *Steganography_Controller Class
+ */
+public class Steganography_Controller
+{
+	//Program Variables
+	private Steganography_View	view;
+	private Steganography		model;
+	
+	//Panel Displays
+	private JPanel		decode_panel;
+	private JPanel		encode_panel;
+	//Panel Variables
+	private JTextArea 	input;
+	private JButton		encodeButton,decodeButton;
+	private JLabel		image_input;
+	//Menu Variables
+	private JMenuItem 	encode;
+	private JMenuItem 	decode;
+	private JMenuItem 	exit;
+	
+	//action event classes
+	private Encode			enc;
+	private Decode			dec;
+	private EncodeButton	encButton;
+	private DecodeButton	decButton;
+	
+	//decode variable
+	private String			stat_path = "";
+	private String			stat_name = "";
+	
+	/*
+	 *Constructor to initialize view, model and environment variables
+	 *@param aView  A GUI class, to be saved as view
+	 *@param aModel A model class, to be saved as model
+	 */
+	public Steganography_Controller(Steganography_View aView, Steganography aModel)
+	{
+		//program variables
+		view  = aView;
+		model = aModel;
+		
+		//assign View Variables
+		//2 views
+		encode_panel	= view.getTextPanel();
+		decode_panel	= view.getImagePanel();
+		//2 data options
+		input			= view.getText();
+		image_input		= view.getImageInput();
+		//2 buttons
+		encodeButton	= view.getEButton();
+		decodeButton	= view.getDButton();
+		//menu
+		encode			= view.getEncode();
+		decode			= view.getDecode();
+		exit			= view.getExit();
+		
+		//assign action events
+		enc = new Encode();
+		encode.addActionListener(enc);
+		dec = new Decode();
+		decode.addActionListener(dec);
+		exit.addActionListener(new Exit());
+		encButton = new EncodeButton();
+		encodeButton.addActionListener(encButton);
+		decButton = new DecodeButton();
+		decodeButton.addActionListener(decButton);
+		
+		//encode view as default
+		encode_view();
+	}
+	
+	/*
+	 *Updates the single panel to display the Encode View.
+	 */
+	private void encode_view()
+	{
+		update();
+		view.setContentPane(encode_panel);
+		view.setVisible(true);
+	}
+	
+	/*
+	 *Updates the single panel to display the Decode View.
+	 */
+	private void decode_view()
+	{
+		update();
+		view.setContentPane(decode_panel);
+		view.setVisible(true);
+	}
+	
+	/*
+	 *Encode Class - handles the Encode menu item
+	 */
+	private class Encode implements ActionListener
+	{
+		/*
+		 *handles the click event
+		 *@param e The ActionEvent Object
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+			encode_view(); //show the encode view
+		}
+	}
+	
+	/*
+	 *Decode Class - handles the Decode menu item
+	 */
+	private class Decode implements ActionListener
+	{
+		/*
+		 *handles the click event
+		 *@param e The ActionEvent Object
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+			decode_view(); //show the decode view
+			
+			//start path of displayed File Chooser
+			JFileChooser chooser = new JFileChooser("./");
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			chooser.setFileFilter(new Image_Filter());
+			int returnVal = chooser.showOpenDialog(view);
+			if (returnVal == JFileChooser.APPROVE_OPTION)
+{
+				File directory = chooser.getSelectedFile();
+				try
+{
+					String image = directory.getPath();
+					stat_name = directory.getName();
+					stat_path = directory.getPath();
+					stat_path = stat_path.substring(0,stat_path.length()-stat_name.length()-1);
+					stat_name = stat_name.substring(0, stat_name.length()-4);
+					image_input.setIcon(new ImageIcon(ImageIO.read(new File(image))));
+				}
+				catch(Exception except) {
+				//msg if opening fails
+				JOptionPane.showMessageDialog(view, "The File cannot be opened!", 
+					"Error!", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		}
+	}
+	
+	/*
+	 *Exit Class - handles the Exit menu item
+	 */
+	private class Exit implements ActionListener
+	{
+		/*
+		 *handles the click event
+		 *@param e The ActionEvent Object
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+			System.exit(0); //exit the program
+		}
+	}
+	
+	/*
+	 *Encode Button Class - handles the Encode Button item
+	 */
+	private class EncodeButton implements ActionListener
+	{
+		/*
+		 *handles the click event
+		 *@param e The ActionEvent Object
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+			//start path of displayed File Chooser
+			JFileChooser chooser = new JFileChooser("./");
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			chooser.setFileFilter(new Image_Filter());
+			int returnVal = chooser.showOpenDialog(view);
+			if (returnVal == JFileChooser.APPROVE_OPTION){
+				File directory = chooser.getSelectedFile();
+				try{
+					String text = input.getText();
+					String ext  = Image_Filter.getExtension(directory);
+					String name = directory.getName();
+					String path = directory.getPath();
+					path = path.substring(0,path.length()-name.length()-1);
+					name = name.substring(0, name.length()-4);
+					
+					String stegan = JOptionPane.showInputDialog(view,
+							"Enter output file name:", "File name",
+							JOptionPane.PLAIN_MESSAGE);
+					
+					if(model.encode(path,name,ext,stegan,text))
+					{
+						JOptionPane.showMessageDialog(view, "The Image was encoded Successfully!", 
+							"Success!", JOptionPane.INFORMATION_MESSAGE);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(view,  
+"The Image could not be encoded!", 
+							"Error!", JOptionPane.INFORMATION_MESSAGE);
+					}
+					//display the new image
+					decode_view();
+					image_input.setIcon(new ImageIcon(ImageIO.read(new File(path + "/" + stegan + ".png"))));
+				}
+				catch(Exception except) {
+					//msg if opening fails
+					JOptionPane.showMessageDialog(view,  
+"The File cannot be opened!", 
+						"Error!", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		}
+		
+	}
+	
+	/*
+	 *Decode Button Class - handles the Decode Button item
+	 */
+	private class DecodeButton implements ActionListener
+	{
+		/*
+		 *handles the click event
+		 *@param e The ActionEvent Object
+		 */
+		public void actionPerformed(ActionEvent e)
+		{
+			String message = model.decode(stat_path, stat_name);
+			System.out.println(stat_path + ", " + stat_name);
+			if(message != "")
+			{
+				encode_view();
+				JOptionPane.showMessageDialog(view,  
+"The Image was decoded Successfully!",  "Success!",  JOptionPane.INFORMATION_MESSAGE);
+				input.setText(message);
+			}
+			else
+			{
+				JOptionPane.showMessageDialog(view, "The Image could not be decoded!", 
+							"Error!", JOptionPane.INFORMATION_MESSAGE);
+			}
+		}
+	}
+	
+	/*
+	 *Updates the variables to an initial state
+	 */
+	public void update()
+	{
+		input.setText("");		//clear textarea
+		image_input.setIcon(null);	//clear image
+		stat_path = "";			//clear path
+		stat_name = "";			//clear name
+	}
+}
