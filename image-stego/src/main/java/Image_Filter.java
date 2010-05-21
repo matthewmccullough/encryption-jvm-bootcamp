@@ -1,18 +1,14 @@
-
 /*
- *@author William_Wilson
- *@version 2.0
- *Created May 10, 2007
+ * Original author: William_Wilson
+ * Original authorship date: May 12, 2007
+ * Original URL: http://www.dreamincode.net/forums/topic/27950-steganography/
+ * 
+ * Derivation: Matthew McCullough
+ * Derivation date: 2010-05-10
  */
 
-/*
- *Import List
- */
-import java.io.*; 
+import java.io.File;
 
-/*
- *Image_Filter Class
- */
 public class Image_Filter extends javax.swing.filechooser.FileFilter
 {
 	/*

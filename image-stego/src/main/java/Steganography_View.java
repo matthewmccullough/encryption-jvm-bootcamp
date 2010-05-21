@@ -1,48 +1,43 @@
-
 /*
- *@author William_Wilson
- *@version 1.0
- *Created May 10, 2007
+ * Original author: William_Wilson
+ * Original authorship date: May 12, 2007
+ * 
+ * Derivation: Matthew McCullough
+ * Derivation date: 2010-05-10
  */
 
-/*
- *Import List
- */
 import java.awt.Color;
-import java.awt.Insets;
-import java.awt.Container;
-import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 
-import javax.swing.JMenu;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JTextArea;
-import javax.swing.JScrollBar;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.BorderFactory;
+import javax.swing.JTextArea;
 
 /*
  *Class Steganography_View
  */
 public class Steganography_View extends JFrame
 {
-	//sie variables for window
+	private static final long serialVersionUID = -1703553958323231590L;
+	//size variables for window
 	private static int WIDTH  = 500;
 	private static int HEIGHT = 400;
 	
 	//elements for JPanel
 	private JTextArea 	input;
-	private JScrollBar 	scroll,scroll2;
 	private JButton		encodeButton,decodeButton;
 	private JLabel		image_input;
 	
 	//elements for Menu
-	private JMenu 		file;
 	private JMenuItem 	encode;
 	private JMenuItem 	decode;
 	private JMenuItem 	exit;
@@ -119,6 +114,8 @@ public class Steganography_View extends JFrame
 	 */
 	private class Text_Panel extends JPanel
 	{
+		private static final long serialVersionUID = -1503714729990491598L;
+
 		/*
 		 *Constructor to enter text to be encoded
 		 */
@@ -163,6 +160,8 @@ public class Steganography_View extends JFrame
 	 */
 	private class Image_Panel extends JPanel
 	{
+		private static final long serialVersionUID = 6962328466941120160L;
+
 		/*
 		 *Constructor for displaying an image to be decoded
 		 */

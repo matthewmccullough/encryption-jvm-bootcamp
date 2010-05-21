@@ -1,33 +1,25 @@
-
 /*
- *@author William_Wilson
- *@version 1.0
- *Created May 12, 2007
+ * Original author: William_Wilson
+ * Original authorship date: May 12, 2007
+ * 
+ * Derivation: Matthew McCullough
+ * Derivation date: 2010-05-10
  */
 
-/*
- *Import List
- */
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 
-import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.image.BufferedImage;
-import java.awt.event.ActionListener;
-
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
-import javax.swing.JMenuItem;
-import javax.swing.JTextArea;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
-/*
- *Steganography_Controller Class
- */
 public class Steganography_Controller
 {
 	//Program Variables

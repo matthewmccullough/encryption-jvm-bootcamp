@@ -1,32 +1,22 @@
 /*
- *@author  William_Wilson
- *@version 1.6
- *Created: May 8, 2007
+ * Original author: William_Wilson
+ * Original authorship date: May 12, 2007
+ * 
+ * Derivation: Matthew McCullough
+ * Derivation date: 2010-05-10
  */
 
-/*
- *import list
- */
-import java.io.File;
-
-import java.awt.Point;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.awt.image.DataBufferByte;
+import java.awt.image.WritableRaster;
+import java.io.File;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
-/*
- *Class Steganography
- */
 public class Steganography
 {
-        
-        /*
-         *Steganography Empty Constructor
-         */
         public Steganography()
         {
         }
