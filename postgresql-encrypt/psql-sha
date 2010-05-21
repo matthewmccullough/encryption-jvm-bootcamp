@@ -1,0 +1,3 @@
+#Log in to the test encryption database.
+#Username and password are: mccm06/mccm06
+psql testencryption --username mccm06 -a -c "select DIGEST('Hello World!', 'sha1')"
