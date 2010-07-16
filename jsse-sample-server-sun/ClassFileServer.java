@@ -151,7 +151,7 @@ public class ClassFileServer extends ClassServer {
     }
 
     private static ServerSocketFactory getServerSocketFactory(String type) {
-	if (type.equals("TLS")) {
+	if (type.equals("SSL") || type.equals("TLS") ) {
 	    SSLServerSocketFactory ssf = null;
 	    try {
 		// set up key manager to do server authentication
@@ -160,7 +160,7 @@ public class ClassFileServer extends ClassServer {
 		KeyStore ks;
 		char[] passphrase = "passphrase".toCharArray();
 
-		ctx = SSLContext.getInstance("TLS");
+		ctx = SSLContext.getInstance(type);
 		kmf = KeyManagerFactory.getInstance("SunX509");
 		ks = KeyStore.getInstance("JKS");
 
