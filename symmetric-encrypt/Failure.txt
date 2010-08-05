@@ -1,0 +1,10 @@
+With a 256 bit key request, we get an exception
+
+java.security.InvalidKeyException: Illegal key size or default parameters
+        at javax.crypto.Cipher.a(DashoA13*..)
+        at javax.crypto.Cipher.a(DashoA13*..)
+        at javax.crypto.Cipher.a(DashoA13*..)
+        at javax.crypto.Cipher.init(DashoA13*..)
+        at javax.crypto.Cipher.init(DashoA13*..)
+        at com.ambientideas.SymmetricEncryptAES.main(SymmetricEncryptAES.java:39)
+        at com.ambientideas.TestSymmetric.testAES(TestSymmetric.java:12)
