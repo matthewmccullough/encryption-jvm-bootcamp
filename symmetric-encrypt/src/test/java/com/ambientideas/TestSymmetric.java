@@ -8,13 +8,12 @@ import org.junit.Test;
 public class TestSymmetric
 {
 	@Test
-    public void testAES()
-    {
-        //Run the main
+    public void testAES() throws Exception {
+        SymmetricEncryptAES.main(null);
     }
 	
 	@Test
-	public void testDES() {
-	    //Run the main
+	public void testDES() throws Exception {
+	    SymmetricEncryptDESEDE.main(null);
 	}
 }
