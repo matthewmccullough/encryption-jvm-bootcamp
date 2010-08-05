@@ -17,7 +17,7 @@ import sun.misc.BASE64Encoder;
  * Use the SecureRandom java security class to generate
  * a more expensive, but cryptographically secure random number.
  */
-public class SymmetricEncrypt 
+public class SymmetricEncryptDESEDE
 {
   public static void main( String[] args )
     throws NoSuchAlgorithmException, NoSuchProviderException,
@@ -27,12 +27,12 @@ public class SymmetricEncrypt
     final String message1 = "Four score and seven years ago";
     
     //Build a new encryption key
-    final KeyGenerator keyGen = KeyGenerator.getInstance("AES");
-    keyGen.init(512);
+    final KeyGenerator keyGen = KeyGenerator.getInstance("DESede");
+    keyGen.init(168);
     final SecretKey desKey = keyGen.generateKey();
     
     //Set up the cipher
-    final Cipher desCipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+    final Cipher desCipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
     
     //////////////////////////////////////
     //Put the cipher in encryption mode
