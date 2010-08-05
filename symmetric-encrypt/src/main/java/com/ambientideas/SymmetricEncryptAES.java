@@ -28,6 +28,7 @@ public class SymmetricEncryptAES
     
     //Build a new encryption key
     final KeyGenerator keyGen = KeyGenerator.getInstance("AES");
+    //256 bit fails on Worldwide Policy File (Strong) but succeeds on Unlimited
     keyGen.init(256);
     final SecretKey aesKey = keyGen.generateKey();
     
