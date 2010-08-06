@@ -54,6 +54,7 @@
           <includeProjectDependencies>
             true
           </includeProjectDependencies>
+          <classpathScope>compile</classpathScope>
         </configuration>
       </plugin>
 
