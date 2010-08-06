@@ -58,7 +58,7 @@ public class ExampleECIES {
 		IESParameterSpec iesParams = new IESParameterSpec("AES128_CBC", "HmacSHA1", null, null);
 
 		cipher.init(Cipher.ENCRYPT_MODE, pubKey, iesParams);
-		String cleartextFile = "src/resources/cleartext.txt";
+		String cleartextFile = "src/main/resources/cleartext.txt";
 		String ciphertextFile = "target/ciphertextECIES.txt";
 
 		byte[] block = new byte[64];
