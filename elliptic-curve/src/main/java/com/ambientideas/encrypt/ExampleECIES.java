@@ -83,6 +83,9 @@ public class ExampleECIES {
 			fos.write(block, 0, i);
 		}
 		fos.close();
+		
+		System.out.println("ECIES time in millis: " + (afterECIES - beforeECIES));
 	}
+	
 
 }
