@@ -17,10 +17,6 @@ import sun.misc.BASE64Encoder;
 
 import java.io.FileInputStream;
 
-/**
- * Use the SecureRandom java security class to generate
- * a more expensive, but cryptographically secure random number.
- */
 public class SymmetricEncryptAES
 {
     private static final String message1 = "Four score and seven years ago";
