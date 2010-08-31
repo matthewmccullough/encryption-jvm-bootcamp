@@ -18,7 +18,7 @@ import de.flexiprovider.common.ies.IESParameterSpec;
 import de.flexiprovider.core.FlexiCoreProvider;
 import de.flexiprovider.ec.FlexiECProvider;
 import de.flexiprovider.ec.parameters.CurveParams;
-import de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP160r1;
+import de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP256r1;
 
 
 public class HeadToHeadTest
@@ -42,8 +42,10 @@ public class HeadToHeadTest
             eciesTotalTime = eciesTotalTime + eciesExample();
         }
 
-        System.out.println("Total/Average RSA time in millis: " + rsaTotalTime + "/" + rsaTotalTime / iterations + " Iterations: " + iterations);
-        System.out.println("Total/Average ECIES time in millis: " + eciesTotalTime + "/" + eciesTotalTime / iterations + " Iterations: " + iterations);
+        System.out.println("Total RSA time in millis: " +
+            rsaTotalTime + ", Average time: " + rsaTotalTime / iterations + ", Iterations: " + iterations);
+        System.out.println("Total ECIES time in millis: " +
+            eciesTotalTime + ", Average time: " + eciesTotalTime / iterations + ", Iterations: " + iterations);
     }
 
 
@@ -56,7 +58,11 @@ public class HeadToHeadTest
 
 		KeyPairGenerator kpg = KeyPairGenerator.getInstance("ECIES");
 
-		CurveParams ecParams = new BrainpoolP160r1();   
+        //Curve selection options can be found at:
+        // http://www.flexiprovider.de/javadoc/flexiprovider/docs/de/flexiprovider/ec/parameters/CurveRegistry.html
+        // Brainpool256 is similar to RSA 3072
+        // http://webcache.googleusercontent.com/search?q=cache:iPlB5Jrlh70J:download.microsoft.com/download/5/1/b/51b66cdf-d606-4757-8cee-4ae88d462976/CanadianSecuritySummit-WBILLING_SuiteBCryptoL.ppt+ECIES+bit+strength+ecc&cd=3&hl=en&ct=clnk&gl=us
+		CurveParams ecParams = new BrainpoolP256r1();   
 
 		kpg.initialize(ecParams, new SecureRandom());
 		KeyPair keyPair = kpg.generateKeyPair();

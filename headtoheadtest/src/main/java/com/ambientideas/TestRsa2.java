@@ -22,7 +22,7 @@ public class TestRsa2
 	public void Initialize() throws Exception
 	{
 		KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-		keygen.initialize(512);
+		keygen.initialize(3072);
 		keyPair = keygen.generateKeyPair();
 	}
 
