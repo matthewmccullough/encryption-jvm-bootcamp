@@ -1,8 +1,5 @@
 package com.ambientideas;
 
-import com.ambientideas.TestRsa2;
-
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -30,16 +27,29 @@ public class HeadToHeadTest
     private static String cleartextFile = "src/main/resources/cleartext.txt";
 
     public static void main(String[] args) throws Exception {
-      System.out.println("Plaintext = " + getTextFromFile(cleartextFile));
 
-      rsaExample();
-      eciesExample();
+        int iterations = 10;
+        long rsaTotalTime = 0;
+        long eciesTotalTime = 0;
+
+        System.out.println("Plaintext = " + getTextFromFile(cleartextFile));
+
+        for (int i = 0; i < iterations; i++) {
+            rsaTotalTime = rsaTotalTime + rsaExample();
+        }
+
+        for (int i = 0; i < iterations; i++) {
+            eciesTotalTime = eciesTotalTime + eciesExample();
+        }
+
+        System.out.println("Total/Average RSA time in millis: " + rsaTotalTime + "/" + rsaTotalTime / iterations + " Iterations: " + iterations);
+        System.out.println("Total/Average ECIES time in millis: " + eciesTotalTime + "/" + eciesTotalTime / iterations + " Iterations: " + iterations);
     }
 
 
 
 
-  	 public static void eciesExample() throws Exception {
+  	 public static long eciesExample() throws Exception {
 
 		Security.addProvider(new FlexiCoreProvider());
 		Security.addProvider(new FlexiECProvider());
@@ -84,17 +94,13 @@ public class HeadToHeadTest
 			fos.write(block, 0, i);
 		}
 		fos.close();
-
 		long afterECIES = java.lang.System.currentTimeMillis();
 
-//        System.out.println("After ECIES Encryption Ciphertext = " + getTextFromFile(ciphertextFile));
-//        System.out.println("After ECIES Decryption Plaintext = " + getTextFromFile(cleartextAgainFile));
-
-		System.out.println("ECIES Encrypt/Decrypt time in millis: " + (afterECIES - beforeECIES));
+        return afterECIES - beforeECIES;   
 	}
 
 
-    public static void rsaExample() throws Exception {
+    public static long rsaExample() throws Exception {
 
         TestRsa2 app = new TestRsa2();
 
@@ -104,12 +110,11 @@ public class HeadToHeadTest
         
         long beforeRSA = java.lang.System.currentTimeMillis();
         String ciphertext = app.encrypt(input);
-//        System.out.println("After RSA Encryption Ciphertext = " + ciphertext);
-//        System.out.println("After RSA Decryption Plaintext = " + app.decrypt(ciphertext));
+        app.decrypt(ciphertext);      
 		long afterRSA = java.lang.System.currentTimeMillis();
-		System.out.println("RSA Encrypt/Decrypt time in millis: " + (afterRSA - beforeRSA));
 
-	}
+        return afterRSA - beforeRSA;
+    }
 
     private static String getTextFromFile(String file) throws Exception {
         FileReader fReader = new FileReader(file);
