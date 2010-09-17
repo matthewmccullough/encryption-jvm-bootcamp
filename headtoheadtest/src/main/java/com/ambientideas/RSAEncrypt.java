@@ -1,25 +1,26 @@
 package com.ambientideas;
 
+import java.io.FileReader;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.PublicKey;
 import java.security.PrivateKey;
+import java.security.PublicKey;
+
+import javax.crypto.Cipher;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-import javax.crypto.Cipher;
-
-public class TestRsa2
+public class RSAEncrypt
 {
 	private KeyPair keyPair;
 
-	public TestRsa2() throws Exception
+	public RSAEncrypt() throws Exception
 	{
-		Initialize();
+		initialize();
 	}
 
-	public void Initialize() throws Exception
+	public void initialize() throws Exception
 	{
 		KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
 		keygen.initialize(3072);
@@ -60,9 +61,26 @@ public class TestRsa2
         return b64.decodeBuffer(text);
     }	
 
+    public static long runExample(String cleartextFilename) throws Exception {
+
+        RSAEncrypt app = new RSAEncrypt();
+
+        FileReader fReader = new FileReader(cleartextFilename);
+        java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
+        String input = bReader.readLine();
+        
+        long beforeRSA = java.lang.System.currentTimeMillis();
+        String ciphertext = app.encrypt(input);
+        app.decrypt(ciphertext);      
+		long afterRSA = java.lang.System.currentTimeMillis();
+
+        return afterRSA - beforeRSA;
+    }
+
+    
 	public static void main(String[] args) throws Exception
 	{
-		TestRsa2 app = new TestRsa2();
+		RSAEncrypt app = new RSAEncrypt();
 
 		System.out.println("Enter a line: ");
 		java.io.InputStreamReader sreader = new java.io.InputStreamReader(System.in);
