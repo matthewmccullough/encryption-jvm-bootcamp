@@ -40,6 +40,7 @@ public class EncryptRSA
     
     
     //Encrypt using the private key
+    //Mode choices (ECB, CBC): http://download.oracle.com/javase/1.5.0/docs/guide/security/jce/JCERefGuide.html
     Cipher rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding");
     rsa.init(Cipher.ENCRYPT_MODE, privKey);
     byte[] encryptedBytes = rsa.doFinal(message1.getBytes());
