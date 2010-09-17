@@ -21,16 +21,15 @@ public class HeadToHeadTest
             eciesTotalTime = eciesTotalTime + ECCEncrypt.runExample();
         }
 
-        System.out.println("Total RSA time in millis: " +
-            rsaTotalTime + ", Average time: " + rsaTotalTime / iterations + ", Iterations: " + iterations);
-        System.out.println("Total ECIES time in millis: " +
-            eciesTotalTime + ", Average time: " + eciesTotalTime / iterations + ", Iterations: " + iterations);
+        System.out.println("Total RSA time: " +
+            rsaTotalTime + "ms, Average time: " + rsaTotalTime / iterations + "ms, Iterations: " + iterations);
+        System.out.println("Total ECIES time: " +
+            eciesTotalTime + "ms, Average time: " + eciesTotalTime / iterations + "ms, Iterations: " + iterations);
     }
 
     private static String getTextFromFile(String file) throws Exception {
         FileReader fReader = new FileReader(file);
         java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
         return bReader.readLine();
-
     }
 }

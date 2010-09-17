@@ -43,9 +43,10 @@ public class ECCEncrypt {
 	}
 
 	public static long runExample() throws Exception {
+		long beforeECIES = java.lang.System.currentTimeMillis();
+		
 		ECCEncrypt eccEncryptor = new ECCEncrypt();
 
- 		long beforeECIES = java.lang.System.currentTimeMillis();
  		eccEncryptor.encrypt();
  		eccEncryptor.decrypt();
  		long afterECIES = java.lang.System.currentTimeMillis();

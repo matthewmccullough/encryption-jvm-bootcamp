@@ -29,13 +29,15 @@ public class RSAEncrypt
 	}
 
     public static long runExample() throws Exception {
+    		long beforeRSA = java.lang.System.currentTimeMillis();
+    	
         RSAEncrypt app = new RSAEncrypt();
 
         FileReader fReader = new FileReader(HeadToHeadTest.CLEARTEXT_FILENAME);
         java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
         String input = bReader.readLine();
         
-        long beforeRSA = java.lang.System.currentTimeMillis();
+        
         String ciphertext = app.encrypt(input);
         app.decrypt(ciphertext);      
 		long afterRSA = java.lang.System.currentTimeMillis();
