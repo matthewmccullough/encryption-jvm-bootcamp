@@ -4,7 +4,7 @@ import java.io.FileReader;
 
 public class HeadToHeadTest
 {
-    private static final String CLEARTEXT_FILENAME = "src/main/resources/cleartext.txt";
+    public static final String CLEARTEXT_FILENAME = "src/main/resources/cleartext.txt";
 
     public static void main(String[] args) throws Exception {
         int iterations = 10;
@@ -14,11 +14,11 @@ public class HeadToHeadTest
         System.out.println("Plaintext = " + getTextFromFile(CLEARTEXT_FILENAME));
 
         for (int i = 0; i < iterations; i++) {
-            rsaTotalTime = rsaTotalTime + RSAEncrypt.runExample(CLEARTEXT_FILENAME);
+            rsaTotalTime = rsaTotalTime + RSAEncrypt.runExample();
         }
 
         for (int i = 0; i < iterations; i++) {
-            eciesTotalTime = eciesTotalTime + ECCEncrypt.runExample(CLEARTEXT_FILENAME);
+            eciesTotalTime = eciesTotalTime + ECCEncrypt.runExample();
         }
 
         System.out.println("Total RSA time in millis: " +

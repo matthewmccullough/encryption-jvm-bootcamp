@@ -13,6 +13,7 @@ import sun.misc.BASE64Encoder;
 
 public class RSAEncrypt
 {
+	private static final int RSA_BITSTRENGTH = 3072;
 	private KeyPair keyPair;
 
 	public RSAEncrypt() throws Exception
@@ -23,9 +24,24 @@ public class RSAEncrypt
 	public void initialize() throws Exception
 	{
 		KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-		keygen.initialize(3072);
+		keygen.initialize(RSA_BITSTRENGTH);
 		keyPair = keygen.generateKeyPair();
 	}
+
+    public static long runExample() throws Exception {
+        RSAEncrypt app = new RSAEncrypt();
+
+        FileReader fReader = new FileReader(HeadToHeadTest.CLEARTEXT_FILENAME);
+        java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
+        String input = bReader.readLine();
+        
+        long beforeRSA = java.lang.System.currentTimeMillis();
+        String ciphertext = app.encrypt(input);
+        app.decrypt(ciphertext);      
+		long afterRSA = java.lang.System.currentTimeMillis();
+
+        return afterRSA - beforeRSA;
+    }
 
 	public String encrypt(String plaintext)  throws Exception
 	{
@@ -61,23 +77,6 @@ public class RSAEncrypt
         return b64.decodeBuffer(text);
     }	
 
-    public static long runExample(String cleartextFilename) throws Exception {
-
-        RSAEncrypt app = new RSAEncrypt();
-
-        FileReader fReader = new FileReader(cleartextFilename);
-        java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
-        String input = bReader.readLine();
-        
-        long beforeRSA = java.lang.System.currentTimeMillis();
-        String ciphertext = app.encrypt(input);
-        app.decrypt(ciphertext);      
-		long afterRSA = java.lang.System.currentTimeMillis();
-
-        return afterRSA - beforeRSA;
-    }
-
-    
 	public static void main(String[] args) throws Exception
 	{
 		RSAEncrypt app = new RSAEncrypt();
