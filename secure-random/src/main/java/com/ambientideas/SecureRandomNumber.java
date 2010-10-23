@@ -41,7 +41,7 @@ public class SecureRandomNumber
 	for (int i = 0; i < iterations; i++) {
 	    //Do the expensive one time setup of the
 	    // random number generator instance
-	    SecureRandom prng = SecureRandom.getInstance("SHA1PRNG");
+	    SecureRandom prng = java.security.SecureRandom.getInstance("SHA1PRNG");
 	    
 	    //Get the next random number
 	    randomNum =  prng.nextInt();
