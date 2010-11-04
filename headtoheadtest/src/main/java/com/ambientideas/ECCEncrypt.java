@@ -27,6 +27,8 @@ import de.flexiprovider.ec.parameters.CurveParams;
 import de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP256r1;
 
 public class ECCEncrypt {
+	public static final String CURVE = "de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP256r1";
+	
  	private KeyPair keyPair;
 	private PublicKey pubKey;
 	private PrivateKey privKey;
@@ -55,7 +57,7 @@ public class ECCEncrypt {
  	}
 	
 	private void initialize() throws NoSuchAlgorithmException,
-	InvalidAlgorithmParameterException, NoSuchProviderException, NoSuchPaddingException {
+	InvalidAlgorithmParameterException, NoSuchProviderException, NoSuchPaddingException, InstantiationException, IllegalAccessException, ClassNotFoundException {
 		Security.addProvider(new FlexiCoreProvider());
 		Security.addProvider(new FlexiECProvider());
 
@@ -65,7 +67,12 @@ public class ECCEncrypt {
 		// http://www.flexiprovider.de/javadoc/flexiprovider/docs/de/flexiprovider/ec/parameters/CurveRegistry.html
 		// Brainpool256 is similar to RSA 3072
 		// http://webcache.googleusercontent.com/search?q=cache:iPlB5Jrlh70J:download.microsoft.com/download/5/1/b/51b66cdf-d606-4757-8cee-4ae88d462976/CanadianSecuritySummit-WBILLING_SuiteBCryptoL.ppt+ECIES+bit+strength+ecc&cd=3&hl=en&ct=clnk&gl=us
-		CurveParams ecParams = new BrainpoolP256r1();   
+		
+		//Won't resolve via forName call, possibly because it is an inner class
+		//CurveParams ecParams = (CurveParams) Class.forName("de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP256r1").newInstance();
+		
+		CurveParams ecParams = new BrainpoolP256r1();
+		//System.out.println(ecParams.getClass().getCanonicalName());
 
 		kpg.initialize(ecParams, new SecureRandom());
 		keyPair = kpg.generateKeyPair();

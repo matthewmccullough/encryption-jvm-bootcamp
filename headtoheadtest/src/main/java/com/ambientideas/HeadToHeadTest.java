@@ -21,10 +21,11 @@ public class HeadToHeadTest
             eciesTotalTime = eciesTotalTime + ECCEncrypt.runExample();
         }
 
-        System.out.println("Total RSA time: " +
-            rsaTotalTime + "ms, Average time: " + rsaTotalTime / iterations + "ms, Iterations: " + iterations);
-        System.out.println("Total ECIES time: " +
-            eciesTotalTime + "ms, Average time: " + eciesTotalTime / iterations + "ms, Iterations: " + iterations);
+        System.out.println("Each algorithm was run [" + iterations + "] times to get an average");
+        System.out.println("RSA bit strength:" + RSAEncrypt.RSA_BITSTRENGTH);
+        System.out.println("Average RSA time: " + rsaTotalTime / iterations + "ms");
+        System.out.println("ECIES bit strength (curve):" + ECCEncrypt.CURVE);
+        System.out.println("ECIES Average time: " + eciesTotalTime / iterations + "ms");
     }
 
     private static String getTextFromFile(String file) throws Exception {

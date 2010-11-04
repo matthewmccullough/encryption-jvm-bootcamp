@@ -13,7 +13,7 @@ import sun.misc.BASE64Encoder;
 
 public class RSAEncrypt
 {
-    private static final int RSA_BITSTRENGTH = 3072;
+    public static final int RSA_BITSTRENGTH = 3072;
     private KeyPair keyPair;
 
     public RSAEncrypt() throws Exception
