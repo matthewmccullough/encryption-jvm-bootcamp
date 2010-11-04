@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
 
   <name>headtoheadtest</name>
-  <url>http://maven.apache.org</url>
+  <url>http://github.com/matthewmccullough/encryption-jvm-bootcamp</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

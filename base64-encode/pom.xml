@@ -4,8 +4,10 @@
   <groupId>com.ambientideas</groupId>
   <artifactId>base64-encode</artifactId>
   <packaging>jar</packaging>
+  <name>BASE64 Encoding Example</name>
   <version>1.0-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
+  <description>Demonstrate the difference between the non-portable com.sun BASE64 encoders and the ones from Apache Commons IO</description>
+  <url>http://github.com/matthewmccullough/encryption-jvm-bootcamp</url>
   <developers>
   	<developer>
   		<id>matthew.mccullough</id>
