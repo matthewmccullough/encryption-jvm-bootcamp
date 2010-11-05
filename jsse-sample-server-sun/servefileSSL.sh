@@ -1,2 +1,2 @@
 #Serves up all files in the current directory over port 2001 via TLS
-java ClassFileServer 2001 . SSL
+java com.ambientideas.encryption.HTTPFileServerDemo 2001 docstoserve SSL false
