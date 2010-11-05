@@ -19,17 +19,21 @@ import sun.misc.BASE64Encoder;
  */
 public class SymmetricEncryptAES
 {
-  public static void main( String[] args )
+  private static final int AES_BIT_STRENGTH = 128;
+
+public static void main( String[] args )
     throws NoSuchAlgorithmException, NoSuchProviderException,
     NoSuchPaddingException, InvalidKeyException,
     IllegalBlockSizeException, BadPaddingException
   {
     final String message1 = "Four score and seven years ago";
     
+    long beforeAES = java.lang.System.currentTimeMillis();
+    
     //Build a new encryption key
     final KeyGenerator keyGen = KeyGenerator.getInstance("AES");
     //256 bit fails on Worldwide Policy File (Strong) but succeeds on Unlimited
-    keyGen.init(256);
+    keyGen.init(AES_BIT_STRENGTH);
     final SecretKey aesKey = keyGen.generateKey();
     
     //Set up the cipher
@@ -42,9 +46,11 @@ public class SymmetricEncryptAES
     //Encrypt and output the base64 data
     byte[] clearText = message1.getBytes();
     byte[] encryptedBytes = aesCipher.doFinal(clearText);
+    long afterAES = java.lang.System.currentTimeMillis();
     BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     String base64Encrypted = b64e.encode(encryptedBytes);
     System.out.println("Encrypted text: " + base64Encrypted);
+    System.out.println("AES took: " + (afterAES - beforeAES) + "ms");
     
     
     //////////////////////////////////////
