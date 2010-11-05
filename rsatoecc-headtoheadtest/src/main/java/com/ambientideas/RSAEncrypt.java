@@ -29,29 +29,25 @@ public class RSAEncrypt
     }
 
     public static long runExample() throws Exception {
-        long beforeRSA = java.lang.System.currentTimeMillis();
-        
-        FileReader fReader = new FileReader(HeadToHeadTest.CLEARTEXT_FILENAME);
-        java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
-        String plaintext = bReader.readLine();
-        
-        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-        keygen.initialize(2048);
-        KeyPair keyPair = keygen.generateKeyPair();
-        
-        String ciphertext = null;
-        
-        PublicKey key = keyPair.getPublic();
-        Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+    		long beforeRSA = java.lang.System.currentTimeMillis();
+    	
+    		RSAEncrypt app = new RSAEncrypt();
 
-        cipher.init(Cipher.ENCRYPT_MODE, key);
+//        System.out.println("Enter a line: ");
+//        java.io.InputStreamReader sreader = new java.io.InputStreamReader(System.in);
+//        java.io.BufferedReader breader = new java.io.BufferedReader(sreader);
+//        String input = breader.readLine();
+    		String input = HeadToHeadTest.getTextFromFile(HeadToHeadTest.CLEARTEXT_FILENAME);
 
-        byte[] cipherbytes = cipher.doFinal(plaintext.getBytes("UTF8"));
-        ciphertext = encodeBASE64(cipherbytes);
+//        System.out.println("Plaintext = " + input);
+
+        String ciphertext = app.encrypt(input);
+//        System.out.println("After Encryption Ciphertext = " + ciphertext);
+//        System.out.println("After Decryption Plaintext = " + app.decrypt(ciphertext));
         
         long afterRSA = java.lang.System.currentTimeMillis();
 
-        return afterRSA - beforeRSA;
+        return afterRSA - beforeRSA;   
     }
 
     public String encrypt(String plaintext)  throws Exception
@@ -90,18 +86,6 @@ public class RSAEncrypt
 
     public static void main(String[] args) throws Exception
     {
-        RSAEncrypt app = new RSAEncrypt();
-
-        System.out.println("Enter a line: ");
-        java.io.InputStreamReader sreader = new java.io.InputStreamReader(System.in);
-        java.io.BufferedReader breader = new java.io.BufferedReader(sreader);
-        String input = breader.readLine();
-
-        System.out.println("Plaintext = " + input);
-
-        String ciphertext = app.encrypt(input);
-        System.out.println("After Encryption Ciphertext = " + ciphertext);
-        System.out.println("After Decryption Plaintext = " + app.decrypt(ciphertext));
-
+        runExample();
     }
 }

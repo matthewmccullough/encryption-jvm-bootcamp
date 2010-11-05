@@ -28,7 +28,7 @@ public class HeadToHeadTest
         System.out.println("ECIES Average time: " + eciesTotalTime / iterations + "ms");
     }
 
-    private static String getTextFromFile(String file) throws Exception {
+    public static String getTextFromFile(String file) throws Exception {
         FileReader fReader = new FileReader(file);
         java.io.BufferedReader bReader = new java.io.BufferedReader(fReader);
         return bReader.readLine();
