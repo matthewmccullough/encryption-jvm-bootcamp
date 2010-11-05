@@ -1,1 +1,1 @@
-keytool -list -keystore testkeys
+keytool -list -keystore keys/sample.keystore
