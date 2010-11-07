@@ -1,6 +1,5 @@
 package com.ambientideas;
 
-import java.io.FileReader;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.PrivateKey;
@@ -13,37 +12,41 @@ import sun.misc.BASE64Encoder;
 
 public class RSAEncrypt
 {
-    public static final int RSA_BITSTRENGTH = 3072;
+    public static final int RSA_BITSTRENGTH_1024 = 1024;
+    public static final int RSA_BITSTRENGTH_2048 = 2048;
+    public static final int RSA_BITSTRENGTH_3072 = 3072;
     private KeyPair keyPair;
 
-    public RSAEncrypt() throws Exception
-    {
-        initialize();
-    }
-
-    public void initialize() throws Exception
-    {
-        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
-        keygen.initialize(RSA_BITSTRENGTH);
-        keyPair = keygen.generateKeyPair();
-    }
-
-    public static long runExample() throws Exception {
-    		long beforeRSA = java.lang.System.currentTimeMillis();
+    public static long runExample(int bitStrength, boolean debugOutput) throws Exception {
     	
-    		RSAEncrypt app = new RSAEncrypt();
+        RSAEncrypt app = new RSAEncrypt();
+        String input = null;
 
-//        System.out.println("Enter a line: ");
-//        java.io.InputStreamReader sreader = new java.io.InputStreamReader(System.in);
-//        java.io.BufferedReader breader = new java.io.BufferedReader(sreader);
-//        String input = breader.readLine();
-    		String input = HeadToHeadTest.getTextFromFile(HeadToHeadTest.CLEARTEXT_FILENAME);
+        long beforeRSA = java.lang.System.currentTimeMillis();
 
-//        System.out.println("Plaintext = " + input);
+        KeyPairGenerator keygen = KeyPairGenerator.getInstance("RSA");
+        keygen.initialize(bitStrength);
+        app.keyPair = keygen.generateKeyPair();
+
+        if (debugOutput == true) {
+            System.out.println("Enter a line: ");
+            java.io.InputStreamReader sreader = new java.io.InputStreamReader(System.in);
+            java.io.BufferedReader breader = new java.io.BufferedReader(sreader);
+            input = breader.readLine();
+        } else {
+    		    input = HeadToHeadTest.getTextFromFile(HeadToHeadTest.CLEARTEXT_FILENAME);
+        }
+
+        if (debugOutput == true) {
+            System.out.println("Plaintext = " + input);
+        }
 
         String ciphertext = app.encrypt(input);
-//        System.out.println("After Encryption Ciphertext = " + ciphertext);
-//        System.out.println("After Decryption Plaintext = " + app.decrypt(ciphertext));
+        
+        if (debugOutput == true) {
+            System.out.println("After Encryption Ciphertext = " + ciphertext);
+            System.out.println("After Decryption Plaintext = " + app.decrypt(ciphertext));
+        }
         
         long afterRSA = java.lang.System.currentTimeMillis();
 
@@ -86,6 +89,8 @@ public class RSAEncrypt
 
     public static void main(String[] args) throws Exception
     {
-        runExample();
+        runExample(RSA_BITSTRENGTH_1024, false);
+        runExample(RSA_BITSTRENGTH_2048, false);
+        runExample(RSA_BITSTRENGTH_3072, false);
     }
 }
