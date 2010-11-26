@@ -1,5 +1,6 @@
 package com.ambientideas;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -27,7 +28,7 @@ public class SymmetricEncryptAES
     public static void main( String[] args )
     throws NoSuchAlgorithmException, NoSuchProviderException,
     NoSuchPaddingException, InvalidKeyException,
-    IllegalBlockSizeException, BadPaddingException
+    IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
     {
         int iterations = 1000;
         long total128time = 0;
@@ -53,7 +54,7 @@ public class SymmetricEncryptAES
 
     private static long encryptAndDecrypt(String message, int bitStrength) throws NoSuchAlgorithmException,
     NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
-    BadPaddingException {
+    BadPaddingException, UnsupportedEncodingException {
         long beforeAES = java.lang.System.currentTimeMillis();
 
         //Build a new encryption key
@@ -70,7 +71,7 @@ public class SymmetricEncryptAES
         aesCipher.init(Cipher.ENCRYPT_MODE, aesKey);
 
         //Encrypt and output the base64 data
-        byte[] clearText = message.getBytes();
+        byte[] clearText = message.getBytes("UTF8");
         byte[] encryptedBytes = aesCipher.doFinal(clearText);
         long afterAES = java.lang.System.currentTimeMillis();
         long time = afterAES - beforeAES;
@@ -88,7 +89,7 @@ public class SymmetricEncryptAES
 
         //Decrypt and output the original string
         byte[] decryptedBytes = aesCipher.doFinal(encryptedBytes);
-        String decryptedText = new String(decryptedBytes);
+        String decryptedText = new String(decryptedBytes, "UTF8");
         System.out.println("Decrypted text: " + decryptedText);
         
         return time;

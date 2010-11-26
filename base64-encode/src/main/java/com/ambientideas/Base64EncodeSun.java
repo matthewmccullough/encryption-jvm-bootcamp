@@ -18,7 +18,7 @@ public class Base64EncodeSun
     System.out.println("Raw text:\r\n" + message1 + "\r\n");
     
     BASE64Encoder b64e = new sun.misc.BASE64Encoder();
-    String base64Encoded = b64e.encode(message1.getBytes());
+    String base64Encoded = b64e.encode(message1.getBytes("UTF8"));
     System.out.println("Base64 encoded text:\r\n" + base64Encoded + "\r\n");
     
     BASE64Decoder b64d = new sun.misc.BASE64Decoder();

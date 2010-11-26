@@ -24,8 +24,8 @@ public class HMAC
 		// Get instance of MAC algorithm MD5 and initialize it with a symmetric key
 		Mac mac = Mac.getInstance("HmacMD5");
 		mac.init(sk);
-		byte[] result1 = mac.doFinal(message1.getBytes());
-		byte[] result2 = mac.doFinal(message2.getBytes());
+		byte[] result1 = mac.doFinal(message1.getBytes("UTF8"));
+		byte[] result2 = mac.doFinal(message2.getBytes("UTF8"));
 		
 		System.out.println(new sun.misc.BASE64Encoder().encode(result1));
 		System.out.println(new sun.misc.BASE64Encoder().encode(result2));

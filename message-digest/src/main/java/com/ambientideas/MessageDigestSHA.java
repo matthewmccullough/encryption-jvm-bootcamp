@@ -1,5 +1,6 @@
 package com.ambientideas;
 
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -15,7 +16,7 @@ import java.security.NoSuchAlgorithmException;
 public class MessageDigestSHA 
 {
   public static void main( String[] args )
-    throws NoSuchAlgorithmException
+    throws NoSuchAlgorithmException, UnsupportedEncodingException
   {
     //Set up the message to be encoded
     final String message1 = "Four score and seven years ago";
@@ -40,11 +41,12 @@ public class MessageDigestSHA
   /**
    * Helper function to both SHA-1 hash and
    * base64 encode the resulting bytes to a String 
+   * @throws UnsupportedEncodingException 
    */
-  public static String shaAndBase64Encode(String message) throws NoSuchAlgorithmException {
+  public static String shaAndBase64Encode(String message) throws NoSuchAlgorithmException, UnsupportedEncodingException {
     MessageDigest sha = MessageDigest.getInstance("SHA-1");
     
-    byte[] digest = sha.digest(message.getBytes());
+    byte[] digest = sha.digest(message.getBytes("UTF8"));
     return new sun.misc.BASE64Encoder().encode(digest);
   }
   
@@ -55,12 +57,13 @@ public class MessageDigestSHA
    * @param salt
    * @return
    * @throws NoSuchAlgorithmException
+   * @throws UnsupportedEncodingException 
    */
-  public static String shaWithKnownSalt(String password, String salt) throws NoSuchAlgorithmException {
+  public static String shaWithKnownSalt(String password, String salt) throws NoSuchAlgorithmException, UnsupportedEncodingException {
     return shaAndBase64Encode(password + salt);
   }
   
-  public static Login shaAndRandomSaltNewAccount(String password) throws NoSuchAlgorithmException {
+  public static Login shaAndRandomSaltNewAccount(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException {
     Login acct = new Login();
     
     acct.salt = new String("" + new java.util.Random().nextInt());

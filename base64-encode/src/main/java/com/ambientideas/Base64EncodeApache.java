@@ -16,7 +16,7 @@ public class Base64EncodeApache
     System.out.println("Raw text:\r\n" + message1);
     System.out.println("Raw text byte count: " + message1.length() + "\r\n");
     
-    String base64Encoded = Base64.encodeBase64String(message1.getBytes()); 
+    String base64Encoded = Base64.encodeBase64String(message1.getBytes("UTF8")); 
     System.out.println("Base64 encoded text:\r\n" + base64Encoded);
     System.out.println("Base64 encoded text byte count: " + base64Encoded.length() + "\r\n");
     

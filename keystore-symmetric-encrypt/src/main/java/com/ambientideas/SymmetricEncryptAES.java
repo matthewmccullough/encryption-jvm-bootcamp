@@ -49,7 +49,7 @@ public class SymmetricEncryptAES
       aesCipher.init(Cipher.ENCRYPT_MODE, aesKey);
 
       //Encrypt and output the base64 data
-      byte[] clearText = message1.getBytes();
+      byte[] clearText = message1.getBytes("UTF8");
       byte[] encryptedBytes = aesCipher.doFinal(clearText);
       
       //Base64 Encoded for display only
@@ -67,7 +67,7 @@ public class SymmetricEncryptAES
 
       //Decrypt and output the original string
       byte[] decryptedBytes = aesCipher.doFinal(encryptedBytes);
-      String decryptedText = new String(decryptedBytes);
+      String decryptedText = new String(decryptedBytes, "UTF8");
       System.out.println("Decrypted text: " + decryptedText);
       
       return decryptedText;

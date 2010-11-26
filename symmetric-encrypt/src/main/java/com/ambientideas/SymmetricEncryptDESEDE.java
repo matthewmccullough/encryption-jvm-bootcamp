@@ -1,5 +1,6 @@
 package com.ambientideas;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -22,7 +23,7 @@ public class SymmetricEncryptDESEDE
   public static void main( String[] args )
     throws NoSuchAlgorithmException, NoSuchProviderException,
     NoSuchPaddingException, InvalidKeyException,
-    IllegalBlockSizeException, BadPaddingException
+    IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
   {
     final String message1 = "Four score and seven years ago";
     
@@ -39,7 +40,7 @@ public class SymmetricEncryptDESEDE
     desCipher.init(Cipher.ENCRYPT_MODE, desKey);
     
     //Encrypt and output the base64 data
-    byte[] clearText = message1.getBytes();
+    byte[] clearText = message1.getBytes("UTF8");
     byte[] encryptedBytes = desCipher.doFinal(clearText);
     BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     String base64Encrypted = b64e.encode(encryptedBytes);
@@ -52,7 +53,7 @@ public class SymmetricEncryptDESEDE
     
     //Decrypt and output the original string
     byte[] decryptedBytes = desCipher.doFinal(encryptedBytes);
-    String decryptedText = new String(decryptedBytes);
+    String decryptedText = new String(decryptedBytes, "UTF8");
     System.out.println("Decrypted text: " + decryptedText);
   }
 }
