@@ -21,7 +21,7 @@ public class ExampleBCPGP {
 		Security.addProvider(new BouncyCastleProvider());
 		
 		//Load Public Key File
-		FileInputStream keyIn = new FileInputStream("src/keys/pub.bpg");
+		FileInputStream keyIn = new FileInputStream("src/main/resources/keys/pub.bpg");
 		PGPPublicKey pubKey = KeyBasedFileProcessorUtil.readPublicKey(keyIn);
 		
 		//Output file
