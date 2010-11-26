@@ -5,7 +5,7 @@
   <artifactId>symmetric-encrypt</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>secure-random</name>
+  <name>symmetric-encrypt</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
