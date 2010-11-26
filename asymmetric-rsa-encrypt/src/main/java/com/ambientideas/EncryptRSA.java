@@ -39,17 +39,17 @@ public class EncryptRSA
     final PublicKey pubKey = pair.getPublic();
     
     
-    //Encrypt using the private key
+    //Encrypt using the public key
     //Mode choices (ECB, CBC): http://download.oracle.com/javase/1.5.0/docs/guide/security/jce/JCERefGuide.html
     Cipher rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-    rsa.init(Cipher.ENCRYPT_MODE, privKey);
+    rsa.init(Cipher.ENCRYPT_MODE, pubKey);
     byte[] encryptedBytes = rsa.doFinal(message1.getBytes("UTF8"));
     BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     String base64Encrypted = b64e.encode(encryptedBytes);
     System.out.println("Encrypted text: " + base64Encrypted);
     
     //Decrypt using the private key
-    rsa.init(Cipher.DECRYPT_MODE, pubKey);
+    rsa.init(Cipher.DECRYPT_MODE, privKey);
     byte[] decryptedBytes = rsa.doFinal(encryptedBytes);
     String decryptedText = new String(decryptedBytes);
     System.out.println("Decrypted text: " + decryptedText);
