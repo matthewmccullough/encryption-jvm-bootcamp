@@ -11,7 +11,7 @@ public class TestKeyUseCrypter {
 
         Crypter crypter = new Crypter("keyset-hmac-fromcodeRSATOENC");
 
-        //Base64 encoded on output
+        //Base64 encoded on input
         String plaintext = crypter.decrypt("AEntN-BIuDlJjsHOLfYGfc6T7DFqaBqC4dUXnpzuJ8J"+
                 "_JfIHoClDqlXIz_nSkXpyYVfWLqCiRfpDTObCSJB7rkHfgU6OTGfCHYV3EaOBwMDNtslEo4"+
                 "qpzgjJbcyNnbEK34giVW5szXtCvqiiAxhB9ZtSTFT8d2mQz8Scwc2Vd4S4OHvfVZ8oxRUpE"+
