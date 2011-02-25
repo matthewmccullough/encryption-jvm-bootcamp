@@ -75,6 +75,8 @@ Promote active version 1 to primary:
 ## Asymmetric
 Create an asymmetric signing (DSA) keyset:
 
-java -jar KeyczarTool.jar create --location=/path/to/keyset --purpose=sign --asymmetric=dsa
+    java -jar KeyczarTool.jar create --location=keyset-dsa --purpose=sign --asymmetric=dsa
+    
+Populate the keyset with a DSA key
 
-KeyczarTool addkey --location=/path/to/keyset --status=primary
+    java -jar KeyczarTool.jar addkey --location=keyset-dsa --status=primary

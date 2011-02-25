@@ -7,6 +7,7 @@ import org.keyczar.enums.KeyPurpose;
  */
 public class TestKeyGen {
     public static void main(String[] args) {
+        //For Signing
         // Create a keyset for HMAC signing keys
         // Can't call "create()" directly because it is a private method
         org.keyczar.KeyczarTool.main(new String[]{"create", "--location=keyset-hmac-fromcodeSHA1", "--purpose=sign"});
@@ -26,6 +27,7 @@ public class TestKeyGen {
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeDSA", "--status=primary"});
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeDSA", "--status=active"});
 
+
         //For encryption
         //Create keyset
         org.keyczar.KeyczarTool.main(new String[]{"create", "--location=keyset-hmac-fromcodeRSATOENC", "--purpose=crypt", "--asymmetric=rsa"});
@@ -33,6 +35,5 @@ public class TestKeyGen {
         //Gen keys
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeRSATOENC", "--status=primary"});
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeECTOENC", "--status=primary"});
-
     }
 }

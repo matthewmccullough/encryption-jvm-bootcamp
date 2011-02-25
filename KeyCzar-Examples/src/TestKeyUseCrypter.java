@@ -3,12 +3,10 @@ import org.keyczar.Encrypter;
 import org.keyczar.exceptions.KeyczarException;
 
 /**
- * Programatically create keysets and keys
+ * Decrypt data
  */
 public class TestKeyUseCrypter {
     public static void main(String[] args) throws KeyczarException {
-        //Use the keys
-
         Crypter crypter = new Crypter("keyset-hmac-fromcodeRSATOENC");
 
         //Base64 encoded on input

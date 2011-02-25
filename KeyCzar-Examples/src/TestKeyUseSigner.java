@@ -3,7 +3,7 @@ import org.keyczar.Signer;
 import org.keyczar.exceptions.KeyczarException;
 
 /**
- * Programatically create keysets and keys
+ * Sign and verify data with a signer (not a verifier)
  */
 public class TestKeyUseSigner {
     public static void main(String[] args) throws KeyczarException {
