@@ -25,6 +25,14 @@ public class TestKeyGen {
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeDSA"});
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeDSA", "--status=primary"});
         org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeDSA", "--status=active"});
-        //KeyczarTool addkey --location=/path/to/keyset --crypter=/path/to/crypting/keys
+
+        //For encryption
+        //Create keyset
+        org.keyczar.KeyczarTool.main(new String[]{"create", "--location=keyset-hmac-fromcodeRSATOENC", "--purpose=crypt", "--asymmetric=rsa"});
+        org.keyczar.KeyczarTool.main(new String[]{"create", "--location=keyset-hmac-fromcodeECTOENC", "--purpose=crypt", "--asymmetric=ec"});
+        //Gen keys
+        org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeRSATOENC", "--status=primary"});
+        org.keyczar.KeyczarTool.main(new String[]{"addkey", "--location=keyset-hmac-fromcodeECTOENC", "--status=primary"});
+
     }
 }

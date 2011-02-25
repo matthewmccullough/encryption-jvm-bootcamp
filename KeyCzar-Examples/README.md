@@ -13,7 +13,16 @@ Generate the keyset (container)
     java -jar KeyczarTool.jar create --location=keyset-hmacSHA1 --purpose=sign --name=TestSHA1HMAC
     java -jar KeyczarTool.jar create --location=keyset-hmacRSA --purpose=sign --asymmetric=rsa
     java -jar KeyczarTool.jar create --location=keyset-hmacDSA --purpose=sign --asymmetric=dsa
+    java -jar KeyczarTool.jar create --location=keyset-hmacEC --purpose=sign --asymmetric=ec
+    java -jar KeyczarTool.jar create --location=keyset-hmacECCRYPT --purpose=crypt --asymmetric=ec
 
+Then adding keys
+
+    java -jar KeyczarTool.jar addkey --location=keyset-hmacSHA1 --status=primary
+    java -jar KeyczarTool.jar addkey --location=keyset-hmacRSA --status=primary
+    java -jar KeyczarTool.jar addkey --location=keyset-hmacDSA --status=primary
+    java -jar KeyczarTool.jar addkey --location=keyset-hmacEC --status=primary
+    java -jar KeyczarTool.jar addkey --location=keyset-hmacECCRYPT --status=primary
 
 ## AES Symmetric Keyset
 Generate the keyset (container)
@@ -47,7 +56,20 @@ Add an active (non-primary) key
 
 Export public keys to an output folder
 
-    java -jar KeyczarTool.jar pubkey --location=keyset-aes --destination=keyset-aes-pubkeyexport
+    java -jar KeyczarTool.jar pubkey --location=keyset-rsa --destination=keyset-rsa-pubkeyexport
+
+## Promoting and Demoting Keys
+Promote active version 1 to primary:
+    java -jar KeyczarTool.jar promote --location=keyset-rsa --version=1
+
+• Demote primary version 1 back to active:
+    java -jar KeyczarTool.jar demote --location=keyset-rsa --version=1
+
+• Demote active version 1 to inactive:
+    java -jar KeyczarTool.jar demote --location=keyset-rsa --version=1
+
+• Revoke the inactive version 1:
+    java -jar KeyczarTool.jar revoke --location=keyset-rsa --version=1
 
 
 ## Asymmetric
