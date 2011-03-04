@@ -7,6 +7,8 @@ import org.keyczar.exceptions.KeyczarException;
  */
 public class TestKeyUseCrypter {
     public static void main(String[] args) throws KeyczarException {
+        //Use the keys
+
         Crypter crypter = new Crypter("keyset-hmac-fromcodeRSATOENC");
 
         //Base64 encoded on input
