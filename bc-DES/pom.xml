@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.ambientideas</groupId>
+  <artifactId>bc-des</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>Bouncy Castle DES</name>
+  <url>http://maven.apache.org</url>
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.bouncycastle.openpgp</groupId>
+      <artifactId>bcprov</artifactId>
+      <version>jdk16-145</version>
+      <scope>system</scope>
+      <systemPath>${project.basedir}/lib/bcprov-jdk16-145.jar</systemPath>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <defaultGoal>exec:java</defaultGoal>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <mainClass>
+            com.ambientideas.encrypt.ExampleBCDES
+          </mainClass>
+          <includeProjectDependencies>
+            true
+          </includeProjectDependencies>
+          <classpathScope>compile</classpathScope>
+        </configuration>
+      </plugin>
+
+      <plugin>  
+        <artifactId>maven-compiler-plugin</artifactId>  
+        <configuration>  
+          <source>1.6</source>  
+          <target>1.6</target>  
+        </configuration>  
+      </plugin>
+    </plugins>
+  </build>
+</project>
