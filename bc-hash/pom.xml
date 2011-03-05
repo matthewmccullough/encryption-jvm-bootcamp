@@ -2,10 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.ambientideas</groupId>
-  <artifactId>bc-symmetric</artifactId>
+  <artifactId>bc-hash</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>Bouncy Castle Symmetric Encryption</name>
+  <name>Bouncy Castle Hash</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -39,7 +39,7 @@
         </executions>
         <configuration>
           <mainClass>
-            com.ambientideas.encrypt.ExampleBCDES
+            com.ambientideas.encrypt.ExampleBCSHA512
           </mainClass>
           <includeProjectDependencies>
             true
