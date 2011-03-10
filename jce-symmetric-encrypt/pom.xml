@@ -7,7 +7,7 @@
     <artifactId>crypto-samples</artifactId>
     <version>1.0.1-SNAPSHOT</version>
   </parent>
-  
-  <artifactId>delay-as-brute-force-defense</artifactId>
-  <name>delay-as-brute-force-defense</name>
+
+  <artifactId>jce-symmetric-encrypt</artifactId>
+  <name>jce-symmetric-encrypt</name>
 </project>

@@ -1,51 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.ambientideas</groupId>
-  <artifactId>jce-asymmetric-rsa-encrypt</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <url>http://github.com/matthewmccullough/encryption-jvm-bootcamp</url>
   
-  <developers>
-  	<developer>
-  		<id>matthew.mccullough</id>
-  		<name>Matthew McCullough</name>
-  		<email>matthewm@ambientideas.com</email>
-  		<url>http://ambientideas.com/blog</url>
-  		<organization>Ambient Ideas, LLC</organization>
-  		<organizationUrl>http://ambientideas.com</organizationUrl>
-  		<timezone>GMT-7</timezone>
-  		<properties>
-  			<HoursContributed>9</HoursContributed>
-  		</properties>
-  		<roles>
-  			<role>Lead</role>
-  		</roles>
-  	</developer>
-  </developers>
-  <contributors>
-  	<contributor>
-  		<name>Tim Berglund</name>
-  		<email>tim.berglund@augusttechgroup.com</email>
-  		<url>http://www.augusttechgroup.com</url>
-  		<organization>August Technology Group</organization>
-  		<organizationUrl>http://www.augusttechgroup.com</organizationUrl>
-  		<timezone>GMT-7</timezone>
-  		<properties>
-  			<HoursContributed>2</HoursContributed>
-  		</properties>
-  		<roles>
-  			<role>Advisor</role>
-  		</roles>
-  	</contributor>
-  </contributors>
+  <parent>
+    <groupId>com.ambientideas.cryptography</groupId>
+    <artifactId>crypto-samples</artifactId>
+    <version>1.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <artifactId>jce-asymmetric-rsa-encrypt</artifactId>
+  <name>jce-asymmetric-rsa-encrypt</name>
+
   <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
-      <scope>test</scope>
-    </dependency>
     <dependency>
     	<groupId>commons-logging</groupId>
     	<artifactId>commons-logging</artifactId>

@@ -1,12 +1,58 @@
 <project>
   <modelVersion>4.0.0</modelVersion>
   
-  <groupId>com.ambientideas.encryptionsamples</groupId>
-  <artifactId>encryption-samples-masterproject</artifactId>
-  <version>1.0.1</version>
+  <groupId>com.ambientideas.cryptography</groupId>
+  <artifactId>crypto-samples</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
+  <name>encryption-samples-masterproject</name>
+  <description>A series of examples that demonstrate encryption on the JVM</description>  
+  <url>http://github.com/matthewmccullough/encryption-jvm-bootcamp</url>
   
-  <description>A series of examples that demonstrate encryption on the JVM</description>
+  <developers>
+  	<developer>
+  		<id>matthew.mccullough</id>
+  		<name>Matthew McCullough</name>
+  		<email>matthewm@ambientideas.com</email>
+  		<url>http://ambientideas.com/blog</url>
+  		<organization>Ambient Ideas, LLC</organization>
+  		<organizationUrl>http://ambientideas.com</organizationUrl>
+  		<timezone>GMT-7</timezone>
+  		<properties>
+  			<HoursContributed>140</HoursContributed>
+  		</properties>
+  		<roles>
+  			<role>Lead</role>
+  		</roles>
+  	</developer>
+  </developers>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <defaultGoal>test</defaultGoal>
+    
+    <plugins>
+      <plugin>  
+        <artifactId>maven-compiler-plugin</artifactId>  
+        <configuration>  
+          <source>1.6</source>  
+          <target>1.6</target>  
+        </configuration>  
+      </plugin>
+    </plugins>
+  </build>
+  
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   
   <modules>    
     <module>base64-encode</module>
@@ -22,10 +68,11 @@
     <module>jasypt-hash</module>
     <module>jce-asymmetric-rsa-encrypt</module>
     <module>jce-message-digest</module>
-    <!-- <module>jsse-sample-server-sun</module> -->
+    <module>jce-keygen-rsa</module>
+    <module>jce-keystore-symmetric-encrypt</module>
     <!-- jce-keytool-keys - RUN A SHELL SCRIPT -->
-    <module>keygen-rsa</module>
-    <module>keystore-symmetric-encrypt</module>
+    <module>jce-symmetric-encrypt</module>
+    <!-- <module>jsse-sample-server-sun</module> -->
     <!-- <module>postgresql-encrypt</module> RUN SHELL SCRIPT-->
     <module>rsa-simple-algorithm</module>
     <module>rsatoecc-headtoheadtest</module>
@@ -33,6 +80,5 @@
     <module>secure-random</module>
     <!-- <module>simple-rot</module> -->
     <!-- <module>squid-filter</module> SHELL SCRIPT or WebDriver-->
-    <module>symmetric-encrypt</module>
   </modules>
 </project>

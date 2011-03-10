@@ -11,10 +11,22 @@ public class TestJasyptHash {
     public static String DATA = "Four score and seven years ago.";
 
     @Test
-    public void testHashConsistencyBetweenRuns() throws Exception {
-        final String expectedHash = ExampleJasyptHash.hash(DATA);
-        String hashAgain = ExampleJasyptHash.hash(DATA);
+    public void testHashConsistencyBetweenRunsWithZeroSalt() throws Exception {
+        final String expectedHash = ExampleJasyptHash.hashDefaultAlgorithmZeroSalt(DATA);
+        String hashAgain = ExampleJasyptHash.hashDefaultAlgorithmZeroSalt(DATA);
         Assert.assertEquals(expectedHash, hashAgain);
+    }
+    
+    @Test
+    public void testOutput() throws Exception {
+        System.out.println("Plaintext: " + DATA);
+        System.out.println("Hash First: " + ExampleJasyptHash.hashDefaultAlgorithmZeroSalt(DATA));
+        System.out.println("Hash Again: " + ExampleJasyptHash.hashDefaultAlgorithmZeroSalt(DATA));
+    }
+    
+    @Test
+    public void testMessageMatches() throws Exception {
+        Assert.assertTrue(ExampleJasyptHash.matchesWithSalt(DATA, ExampleJasyptHash.hashDefaultAlgorithmWithSalt(DATA)));
     }
 
     @Test
