@@ -8,24 +8,31 @@
   
   <description>A series of examples that demonstrate encryption on the JVM</description>
   
-  <modules>
-    <module>asymmetric-rsa-encrypt</module>
+  <modules>    
     <module>base64-encode</module>
-    <module>bcpgp</module>
+    <!-- <module>bc-DES</module> -->
+    <module>bc-hash</module>
+    <module>bc-pgp</module>
+    <module>bc-symmetric</module>
     <module>delay</module>
     <module>elliptic-curve</module>
     <module>hmac</module>
     <module>image-stego</module>
     <module>jasypt-example</module>
+    <module>jasypt-hash</module>
+    <module>jce-asymmetric-rsa-encrypt</module>
+    <module>jce-message-digest</module>
     <!-- <module>jsse-sample-server-sun</module> -->
+    <!-- jce-keytool-keys - RUN A SHELL SCRIPT -->
     <module>keygen-rsa</module>
     <module>keystore-symmetric-encrypt</module>
-    <module>message-digest</module>
+    <!-- <module>postgresql-encrypt</module> RUN SHELL SCRIPT-->
     <module>rsa-simple-algorithm</module>
     <module>rsatoecc-headtoheadtest</module>
     <module>salt-on-hibernate</module>
     <module>secure-random</module>
     <!-- <module>simple-rot</module> -->
+    <!-- <module>squid-filter</module> SHELL SCRIPT or WebDriver-->
     <module>symmetric-encrypt</module>
   </modules>
 </project>

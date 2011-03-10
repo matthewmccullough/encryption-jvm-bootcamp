@@ -21,6 +21,8 @@ public class ExamplePBE {
     private static final int iterations = 2000;
     private static final int keyLength = 256;
     private static final SecureRandom random = new SecureRandom();
+    
+    //IvParameterSpec ivspec = generateIV
 
     public static void main(String [] args) throws Exception {
         Security.insertProviderAt(new BouncyCastleProvider(), 1);

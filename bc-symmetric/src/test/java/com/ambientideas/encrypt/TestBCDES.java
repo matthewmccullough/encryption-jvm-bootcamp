@@ -15,11 +15,29 @@ public class TestBCDES
     
 	@Test
     public void testBCDES() throws Exception {
-        Assert.assertEquals("[B@5f326484", ExampleBCDES.doCryptDES(true, KEY, Strings.toUTF8ByteArray(DATA)));
+	    byte[] plaintextOriginal = Strings.toUTF8ByteArray(DATA);
+	    byte[] ciphertext = ExampleBCDES.doCryptDES(true, KEY, Strings.toUTF8ByteArray(DATA));
+	    byte[] plaintextDecrypted = ExampleBCDES.doCryptDES(false, KEY, ciphertext);
+	    String plaintextOriginalString = Strings.fromUTF8ByteArray(plaintextOriginal);
+	    String plaintextDecryptedString = Strings.fromUTF8ByteArray(plaintextDecrypted);
+	    
+        System.out.println("Plaintext DES Original String: " + plaintextOriginalString);
+        System.out.println("Plaintext DES Decrypted String: " + plaintextDecryptedString);
+
+        Assert.assertEquals(plaintextOriginalString, plaintextDecryptedString);
     }
 	
     @Test
     public void testBCBlowfish() throws Exception {
-        Assert.assertEquals("[B@4ebac9b9", ExampleBCDES.doCryptBlowfish(true, KEY, Strings.toUTF8ByteArray(DATA)));
+        byte[] plaintextOriginal = Strings.toUTF8ByteArray(DATA);
+        byte[] ciphertext = ExampleBCDES.doCryptBlowfish(true, KEY, Strings.toUTF8ByteArray(DATA));
+        byte[] plaintextDecrypted = ExampleBCDES.doCryptBlowfish(false, KEY, ciphertext);
+        String plaintextOriginalString = Strings.fromUTF8ByteArray(plaintextOriginal);
+        String plaintextDecryptedString = Strings.fromUTF8ByteArray(plaintextDecrypted);
+        
+        System.out.println("Plaintext Blowfish Original String: " + plaintextOriginalString);
+        System.out.println("Plaintext Blowfish Decrypted String: " + plaintextDecryptedString);
+        
+        Assert.assertEquals(plaintextOriginalString, plaintextDecryptedString);
     }
 }

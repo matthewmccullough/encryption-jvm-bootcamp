@@ -2,11 +2,10 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.ambientideas</groupId>
-  <artifactId>asymmetric-rsa-encrypt</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>jce-asymmetric-rsa-encrypt</artifactId>
   <version>1.0-SNAPSHOT</version>
-  <name>secure-random</name>
   <url>http://github.com/matthewmccullough/encryption-jvm-bootcamp</url>
+  
   <developers>
   	<developer>
   		<id>matthew.mccullough</id>

@@ -1,23 +1,35 @@
 package com.ambientideas.encrypt;
 
+import java.io.FileInputStream;
+import java.util.Properties;
+
 import org.jasypt.digest.StandardStringDigester;
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
+import org.jasypt.properties.EncryptableProperties;
 
 /*
  * Use BouncyCastle for SHA Hashing
  */
-public class ExampleJasyptHash {  
+public class ExampleJasyptPropertyCrypt {  
 	public static void main(String[] args) throws Exception {
-		//Register Bouncy Castle JCE provider
 		final String DATA = "Four score and seven years ago.";
 		
-		System.out.println("SHA1 Plaintext: " + DATA);
-		System.out.println("Hash First: " + hash(DATA));
-		System.out.println("Hash Again: " + hash(DATA));
+		StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
+		encryptor.setPassword("thisismypassword");
+		 
+		Properties props = new EncryptableProperties(encryptor);
+		props.load(new FileInputStream("sample.properties"));
+
+		String datasourceUsername = props.getProperty("datasource.username");
+		String datasourcePassword = props.getProperty("datasource.password");
+
+		System.out.println("Plaintext Username: " + datasourceUsername);
+		System.out.println("Decrypted Password: " + datasourcePassword);
 	}
 	
-	public static String hash(String data) {
+	public static String cry(String data) {
 	    StandardStringDigester digester = new StandardStringDigester();
-	    //digester.setSaltSizeBytes(0);
+	    digester.setSaltSizeBytes(0);
         String digest = digester.digest(data);
 	    
 	    return digest;
