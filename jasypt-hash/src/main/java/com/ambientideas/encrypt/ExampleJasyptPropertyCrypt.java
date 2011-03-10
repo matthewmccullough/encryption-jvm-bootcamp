@@ -27,7 +27,7 @@ public class ExampleJasyptPropertyCrypt {
 		System.out.println("Decrypted Password: " + datasourcePassword);
 	}
 	
-	public static String cry(String data) {
+	public static String crypt(String data) {
 	    StandardStringDigester digester = new StandardStringDigester();
 	    digester.setSaltSizeBytes(0);
         String digest = digester.digest(data);

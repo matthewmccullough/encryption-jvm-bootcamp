@@ -1,7 +1,10 @@
 package com.ambientideas.encrypt;
 
+import java.security.Security;
+
 import junit.framework.Assert;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.Strings;
 import org.junit.Test;
 
@@ -15,6 +18,11 @@ public class TestBCSHA512
     
 	@Test
     public void testBCHash() throws Exception {
-//        Assert.assertEquals("HSKASDLKSALKJD", ExampleBCSHA512.hash(Strings.toUTF8ByteArray(DATA)));
+//Assert.assertEquals("HSKASDLKSALKJD", ExampleBCSHA512.hash(Strings.toUTF8ByteArray(DATA)));
+
+	    //Register Bouncy Castle JCE provider
+        Security.addProvider(new BouncyCastleProvider());
+        
+        //hash
     }	
 }
