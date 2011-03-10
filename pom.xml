@@ -60,7 +60,7 @@
     <module>bc-hash</module>
     <module>bc-pgp</module>
     <module>bc-symmetric</module>
-    <module>delay</module>
+    <module>delay-as-brute-force-defense</module>
     <module>elliptic-curve</module>
     <module>hmac</module>
     <module>image-stego</module>
