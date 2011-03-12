@@ -12,25 +12,30 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import junit.framework.Assert;
+
+import org.junit.Test;
+
 import sun.misc.BASE64Encoder;
 
 /**
- * Use the SecureRandom java security class to generate
- * a more expensive, but cryptographically secure random number.
+ * Unit test for simple App.
  */
-public class SymmetricEncryptAES
+public class TestSymmetricPerformance
 {
     private static final int AES_BIT_STRENGTH_128 = 128;
     private static final int AES_BIT_STRENGTH_192 = 192;
     private static final int AES_BIT_STRENGTH_256 = 256;
     public final static String MESSAGE = "Four score and seven years ago";
 
-    public static void main( String[] args )
-    throws NoSuchAlgorithmException, NoSuchProviderException,
-    NoSuchPaddingException, InvalidKeyException,
-    IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
+	
+    @Test
+    public void testBitStrengthPerformanceComparison()
+        throws NoSuchAlgorithmException, NoSuchProviderException,
+        NoSuchPaddingException, InvalidKeyException,
+        IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
     {
-        int iterations = 1000;
+        int iterations = 10000;
         long total128time = 0;
         long total192time = 0;
         long total256time = 0;
@@ -52,9 +57,10 @@ public class SymmetricEncryptAES
         System.out.println("Average time for AES 256 encryption: " + (total256time / iterations));
     }
 
-    private static long encryptAndDecrypt(String message, int bitStrength) throws NoSuchAlgorithmException,
-    NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
-    BadPaddingException, UnsupportedEncodingException {
+    private long encryptAndDecrypt(String message, int bitStrength) throws NoSuchAlgorithmException,
+            NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
+            BadPaddingException, UnsupportedEncodingException
+    {
         long beforeAES = java.lang.System.currentTimeMillis();
 
         //Build a new encryption key
@@ -79,8 +85,8 @@ public class SymmetricEncryptAES
         BASE64Encoder b64e = new sun.misc.BASE64Encoder();
         String base64Encrypted = b64e.encode(encryptedBytes);
 
-        System.out.println("Encrypted text: " + base64Encrypted);
-        System.out.println("AES encryption at bitstrength " + bitStrength + " took: " + time + "ms");
+//        System.out.println("Encrypted text: " + base64Encrypted);
+//        System.out.println("AES encryption at bitstrength " + bitStrength + " took: " + time + "ms");
 
 
         //////////////////////////////////////
@@ -90,7 +96,8 @@ public class SymmetricEncryptAES
         //Decrypt and output the original string
         byte[] decryptedBytes = aesCipher.doFinal(encryptedBytes);
         String decryptedText = new String(decryptedBytes, "UTF8");
-        System.out.println("Decrypted text: " + decryptedText);
+//        System.out.println("Decrypted text: " + decryptedText);
+        Assert.assertEquals(MESSAGE, decryptedText);
         
         return time;
     }
