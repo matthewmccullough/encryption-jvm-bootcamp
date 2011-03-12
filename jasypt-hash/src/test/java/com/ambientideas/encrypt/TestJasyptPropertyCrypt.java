@@ -1,15 +1,13 @@
 package com.ambientideas.encrypt;
 
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Properties;
 
 import junit.framework.Assert;
 
-import org.jasypt.digest.StandardStringDigester;
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.properties.EncryptableProperties;
 import org.junit.Test;
-import org.omg.CORBA.PolicyListHelper;
 
 /**
  * Jasypt makes crypting properties much simpler than straight JCE.
@@ -19,11 +17,10 @@ public class TestJasyptPropertyCrypt {
     
     final String VALUEPLAINTEXT = "supersecretvalue";
     final String PASSWORDPLAINTEXT = "thisismypassword";
+    final String CIPHERTEXTPASSWORD = "pJPtkzjRnYaOWb0c4FpvV69PHuEDieNBp96HibES4/A=";
     
     @Test
     public void testCryptingAStringForThePropertiesFile() throws Exception {
-
-        
         StandardPBEStringEncryptor encryptor = new StandardPBEStringEncryptor();
         encryptor.setPassword(PASSWORDPLAINTEXT);
         String encryptedValue = encryptor.encrypt(VALUEPLAINTEXT);
@@ -46,7 +43,9 @@ public class TestJasyptPropertyCrypt {
         encryptor.setPassword(PASSWORDPLAINTEXT);
          
         Properties props = new EncryptableProperties(encryptor);
-        props.load(new FileInputStream("sample.properties"));
+        InputStream inputStream = this.getClass().getClassLoader()
+        .getResourceAsStream("sample.properties");
+        props.load(inputStream);
 
         String datasourceUsername = props.getProperty("mysystem.username");
         String datasourcePassword = props.getProperty("mysystem.password");
@@ -55,6 +54,6 @@ public class TestJasyptPropertyCrypt {
         System.out.println("Decrypted Password: " + datasourcePassword);
         
         Assert.assertEquals("matthewmccullough", datasourceUsername);
-        Assert.assertEquals(VALUEPLAINTEXT, datasourcePassword);
+        Assert.assertEquals(CIPHERTEXTPASSWORD, datasourcePassword);
     }
 }
