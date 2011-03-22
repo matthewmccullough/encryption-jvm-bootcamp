@@ -4,8 +4,6 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
 
-
-
 public class HMAC 
 {
 	//Set up the message to be encoded

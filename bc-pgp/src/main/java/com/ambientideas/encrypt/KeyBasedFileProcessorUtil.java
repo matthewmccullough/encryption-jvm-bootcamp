@@ -135,110 +135,99 @@ public class KeyBasedFileProcessorUtil
         throws Exception
     {
         in = PGPUtil.getDecoderStream(in);
-        
-        try
-        {
-            PGPObjectFactory pgpF = new PGPObjectFactory(in);
-            PGPEncryptedDataList    enc;
 
-            Object                  o = pgpF.nextObject();
-            //
-            // the first object might be a PGP marker packet.
-            //
-            if (o instanceof PGPEncryptedDataList)
-            {
-                enc = (PGPEncryptedDataList)o;
-            }
-            else
-            {
-                enc = (PGPEncryptedDataList)pgpF.nextObject();
-            }
-            
-            //
-            // find the secret key
-            //
-            Iterator                    it = enc.getEncryptedDataObjects();
-            PGPPrivateKey               sKey = null;
-            PGPPublicKeyEncryptedData   pbe = null;
-            PGPSecretKeyRingCollection  pgpSec = new PGPSecretKeyRingCollection(
+        PGPObjectFactory pgpF = new PGPObjectFactory(in);
+        PGPEncryptedDataList    enc;
+
+        Object                  o = pgpF.nextObject();
+        //
+        // the first object might be a PGP marker packet.
+        //
+        if (o instanceof PGPEncryptedDataList)
+        {
+            enc = (PGPEncryptedDataList)o;
+        }
+        else
+        {
+            enc = (PGPEncryptedDataList)pgpF.nextObject();
+        }
+
+        //
+        // find the secret key
+        //
+        Iterator                    it = enc.getEncryptedDataObjects();
+        PGPPrivateKey               sKey = null;
+        PGPPublicKeyEncryptedData   pbe = null;
+        PGPSecretKeyRingCollection  pgpSec = new PGPSecretKeyRingCollection(
                 PGPUtil.getDecoderStream(keyIn));
 
-            while (sKey == null && it.hasNext())
-            {
-                pbe = (PGPPublicKeyEncryptedData)it.next();
-                
-                sKey = findSecretKey(pgpSec, pbe.getKeyID(), passwd);
-            }
-            
-            if (sKey == null)
-            {
-                throw new IllegalArgumentException("secret key for message not found.");
-            }
-    
-            InputStream         clear = pbe.getDataStream(sKey, "BC");
-            
-            PGPObjectFactory    plainFact = new PGPObjectFactory(clear);
-            
-            Object              message = plainFact.nextObject();
-    
-            if (message instanceof PGPCompressedData)
-            {
-                PGPCompressedData   cData = (PGPCompressedData)message;
-                PGPObjectFactory    pgpFact = new PGPObjectFactory(cData.getDataStream());
-                
-                message = pgpFact.nextObject();
-            }
-            
-            if (message instanceof PGPLiteralData)
-            {
-                PGPLiteralData      ld = (PGPLiteralData)message;
-                String              outFileName = ld.getFileName();
-                if (ld.getFileName().length() == 0)
-                {
-                    outFileName = defaultFileName;
-                }
-                FileOutputStream    fOut = new FileOutputStream(outFileName);
-                
-                InputStream    unc = ld.getInputStream();
-                int    ch;
-                
-                while ((ch = unc.read()) >= 0)
-                {
-                    fOut.write(ch);
-                }
-            }
-            else if (message instanceof PGPOnePassSignatureList)
-            {
-                throw new PGPException("encrypted message contains a signed message - not literal data.");
-            }
-            else
-            {
-                throw new PGPException("message is not a simple encrypted file - type unknown.");
-            }
+        while (sKey == null && it.hasNext())
+        {
+            pbe = (PGPPublicKeyEncryptedData)it.next();
 
-            if (pbe.isIntegrityProtected())
+            sKey = findSecretKey(pgpSec, pbe.getKeyID(), passwd);
+        }
+
+        if (sKey == null)
+        {
+            throw new IllegalArgumentException("secret key for message not found.");
+        }
+
+        InputStream         clear = pbe.getDataStream(sKey, "BC");
+
+        PGPObjectFactory    plainFact = new PGPObjectFactory(clear);
+
+        Object              message = plainFact.nextObject();
+
+        if (message instanceof PGPCompressedData)
+        {
+            PGPCompressedData   cData = (PGPCompressedData)message;
+            PGPObjectFactory    pgpFact = new PGPObjectFactory(cData.getDataStream());
+
+            message = pgpFact.nextObject();
+        }
+
+        if (message instanceof PGPLiteralData)
+        {
+            PGPLiteralData      ld = (PGPLiteralData)message;
+            String              outFileName = ld.getFileName();
+            if (ld.getFileName().length() == 0)
             {
-                if (!pbe.verify())
-                {
-                    System.err.println("message failed integrity check");
-                }
-                else
-                {
-                    System.err.println("message integrity check passed");
-                }
+                outFileName = defaultFileName;
             }
-            else
+            FileOutputStream    fOut = new FileOutputStream(outFileName);
+
+            InputStream    unc = ld.getInputStream();
+            int    ch;
+
+            while ((ch = unc.read()) >= 0)
             {
-                System.err.println("no message integrity check");
+                fOut.write(ch);
             }
         }
-        catch (PGPException e)
+        else if (message instanceof PGPOnePassSignatureList)
         {
-            System.err.println(e);
-            if (e.getUnderlyingException() != null)
+            throw new PGPException("encrypted message contains a signed message - not literal data.");
+        }
+        else
+        {
+            throw new PGPException("message is not a simple encrypted file - type unknown.");
+        }
+
+        if (pbe.isIntegrityProtected())
+        {
+            if (!pbe.verify())
             {
-                e.getUnderlyingException().printStackTrace();
+                System.err.println("message failed integrity check");
             }
+            else
+            {
+                System.err.println("message integrity check passed");
+            }
+        }
+        else
+        {
+            System.err.println("no message integrity check");
         }
     }
 

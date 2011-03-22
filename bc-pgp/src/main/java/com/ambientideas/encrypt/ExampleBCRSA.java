@@ -12,6 +12,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 public class ExampleBCRSA {
 
     /**
+     * Use BouncyCastle's implementation of RSA
      * @param args
      * @throws NoSuchPaddingException 
      * @throws NoSuchProviderException 
