@@ -12,10 +12,9 @@ import org.bouncycastle.crypto.Digest;
 import org.bouncycastle.crypto.digests.SHA1Digest;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.Strings;
+import org.bouncycastle.util.encoders.Base64;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import sun.misc.BASE64Encoder;
 
 /**
  * Test the BouncyCastle SHA512 implementation
@@ -25,11 +24,10 @@ public class TestBCSimpleDigest
     public static String DATA = "Four score and seven years ago.";
     public static byte[] KEY = "thisisak".getBytes();
     public static String SHA1_DIGEST_KNOWN_RESULT = "PC0ImQNAvA9Nf8/n5qhJqEtUD1A=";
-    public static String WHIRLPOOL_DIGEST_KNOWN_RESULT = "Vp47q36YdKmVYHgVZ5MpLPJWbc829DPJ5TevTrt5Bu6IyZ7OcCyc/dNte1rt5KqrG7yAOBttItL2\n"
+    public static String WHIRLPOOL_DIGEST_KNOWN_RESULT = "Vp47q36YdKmVYHgVZ5MpLPJWbc829DPJ5TevTrt5Bu6IyZ7OcCyc/dNte1rt5KqrG7yAOBttItL2"
         +"PO026bGh0w==";
     
     @SuppressWarnings("restriction")
-    public static BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     
     @BeforeClass
     public static void loadBCProvider() {
@@ -46,7 +44,7 @@ public class TestBCSimpleDigest
         byte[] hashResultBytes = new byte[digest.getDigestSize()];
         digest.update(utf8ByteArrayData, 0, utf8ByteArrayData.length);
         digest.doFinal(hashResultBytes, 0);
-        String hashResult = new String(b64e.encode(hashResultBytes));
+        String hashResult = new String(Base64.encode(hashResultBytes));
         
         //System.out.println("Hash result: " + hashResult);
         Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, hashResult);
@@ -67,10 +65,10 @@ public class TestBCSimpleDigest
         Assert.assertEquals("SUN version 1.6", sha.getProvider().toString());
         
         byte[] digestResultBytes = sha.digest(DATA.getBytes("UTF8"));
-        String digestResultB64String = b64e.encode(digestResultBytes);
+        byte[] digestResultB64String = Base64.encode(digestResultBytes);
         
         //System.out.println("Hash result: " + digestResultB64String);
-        Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, digestResultB64String);
+        Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, new String(digestResultB64String));
 	}
 	
     /**
@@ -91,10 +89,10 @@ public class TestBCSimpleDigest
         Assert.assertEquals("BC version 1.45", sha.getProvider().toString());
         
         byte[] digestResultBytes = sha.digest(DATA.getBytes("UTF8"));
-        String digestResultB64String = b64e.encode(digestResultBytes);
+        byte[] digestResultB64String = Base64.encode(digestResultBytes);
         
         //System.out.println("Hash result: " + digestResultB64String);
-        Assert.assertEquals(WHIRLPOOL_DIGEST_KNOWN_RESULT, digestResultB64String);
+        Assert.assertEquals(WHIRLPOOL_DIGEST_KNOWN_RESULT, new String(digestResultB64String));
     }
 	
 	/**
@@ -112,10 +110,10 @@ public class TestBCSimpleDigest
         Assert.assertEquals("BC version 1.45", sha.getProvider().toString());
         
         byte[] digestResultBytes = sha.digest(DATA.getBytes("UTF8"));
-        String digestResultB64String = b64e.encode(digestResultBytes);
+        byte[] digestResultB64String = Base64.encode(digestResultBytes);
         
         //System.out.println("Hash result: " + digestResultB64String);
-        Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, digestResultB64String);
+        Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, new String(digestResultB64String));
     }
     
     @Test(expected=NoSuchAlgorithmException.class)
