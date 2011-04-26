@@ -2,12 +2,18 @@ package com.ambientideas.encrypt;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
 import java.security.Security;
+
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
 
 import junit.framework.Assert;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openpgp.PGPPublicKey;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import sun.misc.BASE64Encoder;
@@ -31,6 +37,18 @@ public class TestBCPGP
     @SuppressWarnings("restriction")
     public static BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     
+    @Test
+    @Ignore //Doesn't return the expected provider unless explicitly requested with BC as the 2nd param
+    public void testBCPGPProviderRegistration() throws NoSuchAlgorithmException, GeneralSecurityException {
+        Security.addProvider(new BouncyCastleProvider());
+        
+        Cipher cipherSunRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        //TODO: Test provider returned is BC (but turns out it isn't)
+        
+        Cipher cipherBCRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding","BC");
+        //TODO: Test provider returned is BC
+    }
+    
 	@SuppressWarnings("restriction")
     @Test
     public void testBCPGP() throws Exception {
@@ -43,10 +61,10 @@ public class TestBCPGP
         Assert.assertEquals(EXPECTED_PUBKEY, b64e.encode(pubKey.getEncoded()));
         
         //Output file
-        FileOutputStream out = new FileOutputStream("target/encrypted.bpg");
+        FileOutputStream out = new FileOutputStream("target/encrypted1.bpg");
         
         //Input file
-        String inputFilename = "src/main/resources/cleartext.txt";
+        String inputFilename = "src/main/resources/cleartext1.txt";
         
         //Other settings
         boolean armor = false;
@@ -55,8 +73,9 @@ public class TestBCPGP
         KeyBasedFileProcessorUtil.encryptFile(out, inputFilename, pubKey, armor, integrityCheck);
         
         FileInputStream privKeyIn = new FileInputStream("src/main/resources/keys/secret.bpg");
-        FileInputStream encryptedFileIn = new FileInputStream("target/encrypted.bpg");
-        KeyBasedFileProcessorUtil.decryptFile(encryptedFileIn, privKeyIn, "123456789".toCharArray(), "target/decrypted.txt");
+        FileInputStream encryptedFileIn = new FileInputStream("target/encrypted1.bpg");
+        //Note that the final parameter is a path to output all the potential files inside the BPG file
+        KeyBasedFileProcessorUtil.decryptFile(encryptedFileIn, privKeyIn, "123456789".toCharArray(), "", "target/");
     }
 	
 	@SuppressWarnings("restriction")
@@ -71,10 +90,10 @@ public class TestBCPGP
         Assert.assertEquals(EXPECTED_PUBKEY, b64e.encode(pubKey.getEncoded()));
         
         //Output file
-        FileOutputStream out = new FileOutputStream("target/encrypted.bpg");
+        FileOutputStream out = new FileOutputStream("target/encrypted2.bpg");
         
         //Input file
-        String inputFilename = "src/main/resources/cleartext.txt";
+        String inputFilename = "src/main/resources/cleartext2.txt";
         
         //Other settings
         boolean armor = false;
@@ -83,7 +102,7 @@ public class TestBCPGP
         KeyBasedFileProcessorUtil.encryptFile(out, inputFilename, pubKey, armor, integrityCheck);
         
         FileInputStream privKeyIn = new FileInputStream("src/main/resources/keys/secret.bpg");
-        FileInputStream encryptedFileIn = new FileInputStream("target/encrypted.bpg");
-        KeyBasedFileProcessorUtil.decryptFile(encryptedFileIn, privKeyIn, "NOTTHERIGHTPASSWORD".toCharArray(), "target/decrypted.txt");
+        FileInputStream encryptedFileIn = new FileInputStream("target/encrypted2.bpg");
+        KeyBasedFileProcessorUtil.decryptFile(encryptedFileIn, privKeyIn, "NOTTHERIGHTPASSWORD".toCharArray(), "", "target/");
     }
 }

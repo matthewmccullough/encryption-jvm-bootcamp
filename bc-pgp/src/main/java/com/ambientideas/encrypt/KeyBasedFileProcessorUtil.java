@@ -32,6 +32,16 @@ import java.security.SecureRandom;
 import java.security.Security;
 import java.util.Iterator;
 
+//Matthew McCullough: Rediculous as it sounds, many of the functions such as 
+// private static void encryptFile()
+// private static void decryptFile()
+// private static PGPPrivateKey findSecretKey()
+// private static PGPPublicKey readPublicKey()
+// for PGP in BouncyCastle are private, thus making it unbearable to use
+// in a simple manner against whole file contents. Thus, this class is duplicated from the
+// core of BouncyCastle (KeyBasedFileProcessor being the original name), but with the
+// methods made public so that the test can use them.
+
 /**
  * A simple utility class that encrypts/decrypts public key based
  * encryption files.
@@ -131,7 +141,8 @@ public class KeyBasedFileProcessorUtil
         InputStream in,
         InputStream keyIn,
         char[]      passwd,
-        String      defaultFileName)
+        String      defaultFileName,
+        String      outputPath)
         throws Exception
     {
         in = PGPUtil.getDecoderStream(in);
@@ -195,6 +206,12 @@ public class KeyBasedFileProcessorUtil
             {
                 outFileName = defaultFileName;
             }
+            
+            //MJM: Enhancement to allow targeting of output folder for decrypted files
+            if (outputPath == null || outputPath.length() > 0) {
+                outFileName = outputPath + outFileName;
+            }
+            
             FileOutputStream    fOut = new FileOutputStream(outFileName);
 
             InputStream    unc = ld.getInputStream();
@@ -317,7 +334,7 @@ public class KeyBasedFileProcessorUtil
         {
             FileInputStream    in = new FileInputStream(args[1]);
             FileInputStream    keyIn = new FileInputStream(args[2]);
-            decryptFile(in, keyIn, args[3].toCharArray(), new File(args[1]).getName() + ".out");
+            decryptFile(in, keyIn, args[3].toCharArray(), new File(args[1]).getName() + ".out", null);
         }
         else
         {
