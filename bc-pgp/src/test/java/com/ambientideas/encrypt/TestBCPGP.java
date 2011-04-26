@@ -7,7 +7,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.Security;
 
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 
 import junit.framework.Assert;
 
@@ -38,15 +37,24 @@ public class TestBCPGP
     public static BASE64Encoder b64e = new sun.misc.BASE64Encoder();
     
     @Test
-    @Ignore //Doesn't return the expected provider unless explicitly requested with BC as the 2nd param
+   // @Ignore //Doesn't return the expected provider unless explicitly requested with BC as the 2nd param
     public void testBCPGPProviderRegistration() throws NoSuchAlgorithmException, GeneralSecurityException {
-        Security.addProvider(new BouncyCastleProvider());
-        
+        //Test the algorithm brought back before the BC provider is inserted
         Cipher cipherSunRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-        //TODO: Test provider returned is BC (but turns out it isn't)
+        Assert.assertEquals("SunJCE version 1.6", cipherSunRSA.getProvider().toString());
+
+        //Add the BC provider. If no position it given, provider adds to end of list
+        int positionAdded = Security.insertProviderAt(new BouncyCastleProvider(), 1);
+        Assert.assertEquals(1, positionAdded);
         
+        //Now that the BC provider is inserted at position 1, an unconstrained request for RSA will
+        // still come from BC
+        Cipher cipherDefaultRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding");
+        Assert.assertEquals("BC version 1.45", cipherDefaultRSA.getProvider().toString());
+        
+        //When specifically requested via "BC", then BouncyCastle is returned.
         Cipher cipherBCRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding","BC");
-        //TODO: Test provider returned is BC
+        Assert.assertEquals("BC version 1.45", cipherBCRSA.getProvider().toString());
     }
     
 	@SuppressWarnings("restriction")
