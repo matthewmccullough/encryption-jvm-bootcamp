@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+    <typedef name="encryptedstring" class="org.jasypt.hibernate.type.EncryptedStringType">
+      <param name="encryptorRegisteredName">strongHibernateStringEncryptor</param>
+    </typedef>
+    
+	<class name="com.ambientideas.cryptography.UserAccount" table="USERACCOUNTS">
+        <id name="accountId" column="ACCOUNT_ID">
+            <generator class="native"/>
+        </id>
+        <property name="accountCreationDate" type="timestamp" column="ACCOUNT_CREATION_DATE"/>
+        <property name="username"/>
+        <property name="passwordHash" column="PASSWORD_HASH"/>
+        <property name="randomSalt" column="RANDOM_SALT"/>
+        <property name="emailAddress" column="EMAIL_ADDRESS"/>
+        <property name="biography" type="encryptedstring" column="BIOGRAPHY"/>
+        <property name="biographyRaw" type="string" column="BIOGRAPHY" insert="false" update="false"/>
+	</class>
+</hibernate-mapping>
