@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.Provider;
 import java.security.Security;
 
 import junit.framework.Assert;
@@ -15,6 +16,7 @@ import org.bouncycastle.util.Strings;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Test the BouncyCastle SHA512 implementation
@@ -78,8 +80,8 @@ public class TestBCSimpleDigest
     @SuppressWarnings("restriction")
     @Test
     public void testBCHashWhirlpoolJCEAPI() throws NoSuchAlgorithmException, UnsupportedEncodingException {
-        //Register Bouncy Castle JCE provider at the end of the list
-        //Security.addProvider(new BouncyCastleProvider());
+        //Register Bouncy Castle JCE provider at the beginning of the provider list
+        //Security.insertProviderAt(new BouncyCastleProvider(), 1);
         
         //Ask for a algorithm that only BC has and prove it is BC by the class name
         MessageDigest sha = MessageDigest.getInstance("Whirlpool");
@@ -97,11 +99,32 @@ public class TestBCSimpleDigest
 	
 	/**
      * Ask for SHA-1 with BouncyCastle at end of provider list. Will get
-     * the core JCE implementation instead.
+     * the core JCE implementation.
      */
     @SuppressWarnings("restriction")
     @Test
-    public void testBCHashBCProviderJCEAPI() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
+    public void testSHA1HashJCEProvider() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
+        //Ask for a algorithm that both SUN and BC have and prove it is JCE by the class name
+        MessageDigest sha = MessageDigest.getInstance("SHA1");
+        
+        Assert.assertEquals("SHA1 Message Digest from SUN, <initialized>\n", sha.toString());
+        Assert.assertEquals("SHA1", sha.getAlgorithm().toString());
+        Assert.assertEquals("SUN version 1.6", sha.getProvider().toString());
+        
+        byte[] digestResultBytes = sha.digest(DATA.getBytes("UTF8"));
+        byte[] digestResultB64String = Base64.encode(digestResultBytes);
+        
+        Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, new String(digestResultB64String));
+    }
+    
+    /**
+     * Ask for SHA-1 with BouncyCastle at end of provider list. Given that we asked
+     * qualified by the "BC" provider sub-name, we will get the BC implemented as
+     * expected.
+     */
+    @SuppressWarnings("restriction")
+    @Test
+    public void testSHA1HashBCProviderDirectly() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
         //Ask for a algorithm that both SUN and BC have and prove it is BC by the class name
         MessageDigest sha = MessageDigest.getInstance("SHA1", "BC");
         
@@ -112,7 +135,37 @@ public class TestBCSimpleDigest
         byte[] digestResultBytes = sha.digest(DATA.getBytes("UTF8"));
         byte[] digestResultB64String = Base64.encode(digestResultBytes);
         
-        //System.out.println("Hash result: " + digestResultB64String);
+        Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, new String(digestResultB64String));
+    }
+    
+    /**
+     * Ask for SHA-1 with BouncyCastle at front of provider list. We will get the BC implemented as
+     * expected.
+     */
+    @SuppressWarnings("restriction")
+    @Test
+    public void testSHA1HashBCProvider() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
+        //Since BC was already registered in the startup of the test harness, we must remove it before re-adding
+        Security.removeProvider("BC");
+        //Register Bouncy Castle JCE provider at the front of the list, ensuring it takes position 1
+        assertEquals(1, Security.insertProviderAt(new BouncyCastleProvider(), 1));
+  
+        //Debugging output
+//        System.out.println(Security.getAlgorithms("MessageDigest"));
+//        for (Provider p : Security.getProviders()) {
+//            System.out.println(p);
+//        }
+                
+        //Ask for a algorithm that both SUN and BC have and prove it is BC by the class name
+        MessageDigest sha = MessageDigest.getInstance("SHA1");
+        
+        Assert.assertEquals("SHA-1 Message Digest from BC, <initialized>\n", sha.toString());
+        Assert.assertEquals("SHA-1", sha.getAlgorithm().toString());
+        Assert.assertEquals("BC version 1.45", sha.getProvider().toString());
+        
+        byte[] digestResultBytes = sha.digest(DATA.getBytes("UTF8"));
+        byte[] digestResultB64String = Base64.encode(digestResultBytes);
+        
         Assert.assertEquals(SHA1_DIGEST_KNOWN_RESULT, new String(digestResultB64String));
     }
     
