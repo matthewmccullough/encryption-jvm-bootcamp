@@ -7,8 +7,6 @@ public class UserAccount {
 
     private Date accountCreationDate;
     private String username;
-    private String passwordHash;
-    private String randomSalt;
     private String emailAddress;
     private String biography;
     private String biographyRaw;
@@ -37,22 +35,6 @@ public class UserAccount {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public String getPasswordHash() {
-		return passwordHash;
-	}
-
-	public void setPasswordHash(String passwordHash) {
-		this.passwordHash = passwordHash;
-	}
-
-	public String getRandomSalt() {
-		return randomSalt;
-	}
-
-	public void setRandomSalt(String randomSalt) {
-		this.randomSalt = randomSalt;
 	}
 
 	public String getEmailAddress() {
@@ -87,9 +69,6 @@ public class UserAccount {
 				+ (accountId != null ? "accountId=" + accountId + ", " : "")
 				+ (emailAddress != null ? "emailAddress=" + emailAddress + ", "
 						: "")
-				+ (passwordHash != null ? "passwordHash=" + passwordHash + ", "
-						: "")
-				+ (randomSalt != null ? "randomSalt=" + randomSalt + ", " : "")
 				+ (username != null ? "username=" + username : "") + "]"
 				+ (biography != null ? "biography=" + biography : "") + "]"
 				+ (biographyRaw != null ? "biographyRaw=" + biographyRaw : "") + "]";

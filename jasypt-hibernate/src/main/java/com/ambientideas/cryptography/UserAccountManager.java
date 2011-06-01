@@ -16,12 +16,7 @@ public class UserAccountManager {
         UserAccount theNewUser = new UserAccount();
         theNewUser.setUsername(userName);
         
-        String randomSalt = HashUtils.randomSalt();
-        
-        String passwordHash = HashUtils.hash(randomSalt + password);
-        theNewUser.setPasswordHash(passwordHash);
         theNewUser.setEmailAddress(emailAddress);
-        theNewUser.setRandomSalt(randomSalt);
         theNewUser.setAccountCreationDate(new Date());
         theNewUser.setBiography(biography);
 
@@ -43,9 +38,8 @@ public class UserAccountManager {
         
         if (ua != null) {
             log.debug(ua);
-        	//Test password validity
-            String hashWithSalt = HashUtils.hash(ua.getRandomSalt() + password);
-            if (hashWithSalt.equals(ua.getPasswordHash())) {
+            //Test username validity
+            if (userName.equals(ua.getUsername())) {
         	    loginSuccessful = true;
             }
         }

@@ -14,8 +14,6 @@
         </id>
         <property name="accountCreationDate" type="timestamp" column="ACCOUNT_CREATION_DATE"/>
         <property name="username"/>
-        <property name="passwordHash" column="PASSWORD_HASH"/>
-        <property name="randomSalt" column="RANDOM_SALT"/>
         <property name="emailAddress" column="EMAIL_ADDRESS"/>
         <property name="biography" type="encryptedstring" column="BIOGRAPHY"/>
         <property name="biographyRaw" type="string" column="BIOGRAPHY" insert="false" update="false"/>
