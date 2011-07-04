@@ -1,7 +1,6 @@
 package com.ambientideas.cryptography;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 
 import junit.framework.Assert;
 
