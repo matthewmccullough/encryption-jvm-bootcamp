@@ -56,23 +56,28 @@
   
   <modules>    
     <module>base64-encode</module>
-    <!-- <module>bc-DES</module> -->
-    <module>bc-hash</module>
+    <module>bc-digest</module>
     <module>bc-pgp</module>
     <module>bc-symmetric</module>
     <module>delay-as-brute-force-defense</module>
     <module>elliptic-curve</module>
-    <module>hmac</module>
     <module>image-stego</module>
-    <module>jasypt-example</module>
+    
     <module>jasypt-hash</module>
+    <module>jasypt-hibernate</module>
+    <module>jasypt-pbe</module>
+    <module>jasypt-spring3-example</module>
+
     <module>jce-asymmetric-rsa-encrypt</module>
-    <module>jce-message-digest</module>
+    <module>jce-hmac</module>
     <module>jce-keygen-rsa</module>
     <module>jce-keystore-symmetric-encrypt</module>
     <!-- jce-keytool-keys - RUN A SHELL SCRIPT -->
+    <module>jce-message-digest</module>
     <module>jce-symmetric-encrypt</module>
     <!-- <module>jsse-sample-server-sun</module> -->
+    <!-- <module>postgresql-encrypt</module> RUN SHELL SCRIPT-->
+    <!-- <module>keyczar-examples</module> RUN SHELL SCRIPT-->
     <!-- <module>postgresql-encrypt</module> RUN SHELL SCRIPT-->
     <module>rsa-simple-algorithm</module>
     <module>rsatoecc-headtoheadtest</module>
