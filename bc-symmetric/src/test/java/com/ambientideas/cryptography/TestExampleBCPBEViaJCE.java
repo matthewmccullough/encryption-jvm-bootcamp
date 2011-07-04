@@ -1,4 +1,4 @@
-package com.ambientideas.encrypt;
+package com.ambientideas.cryptography;
 
 import java.security.SecureRandom;
 import java.security.Security;
