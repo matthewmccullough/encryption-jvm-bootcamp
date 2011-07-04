@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
  * Digest algorithms provided by the JRE are listed here:
  * http://java.sun.com/j2se/1.4.2/docs/guide/security/CryptoSpec.html#MessageDigest
  */
-public class MessageDigestSHA 
+public class TestMessageDigestSHA 
 {
   public static void main( String[] args )
     throws NoSuchAlgorithmException, UnsupportedEncodingException
