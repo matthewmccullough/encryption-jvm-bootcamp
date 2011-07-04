@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
-public class DemoCryptTest
+public class TestDemoCrypt
 {
     public static ApplicationContext context = null;
     public static final String SSN = "234234234";
