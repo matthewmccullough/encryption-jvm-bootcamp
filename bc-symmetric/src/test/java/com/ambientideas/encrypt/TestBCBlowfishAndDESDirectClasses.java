@@ -1,6 +1,6 @@
 package com.ambientideas.encrypt;
 
-import java.security.Security;
+import junit.framework.Assert;
 
 import org.bouncycastle.crypto.BufferedBlockCipher;
 import org.bouncycastle.crypto.InvalidCipherTextException;
@@ -9,27 +9,39 @@ import org.bouncycastle.crypto.engines.DESEngine;
 import org.bouncycastle.crypto.modes.CBCBlockCipher;
 import org.bouncycastle.crypto.modes.PaddedBlockCipher;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.util.Strings;
+import org.junit.Test;
 
 /*
  * Use BouncyCastle for DES encryption
  */
-public class ExampleBCDES {
-    
-	public static void main(String[] args) throws Exception {
-		//Register Bouncy Castle JCE provider
-		Security.insertProviderAt(new BouncyCastleProvider(), 1);
-		
+@SuppressWarnings("deprecation")
+public class TestBCBlowfishAndDESDirectClasses {
+    @Test
+	public void testBlowfish() throws Exception {
 		final String DATA = "Four score and seven years ago.";
 		final byte[] KEY = "thisisak".getBytes();
 		
+        byte[] resultencrypt = doCryptBlowfish(true, KEY, Strings.toUTF8ByteArray(DATA));
+        System.out.println("Blowfish Encrypt Result: " + resultencrypt.toString());
+        
+        byte[] resultdecrypt = doCryptBlowfish(false, KEY, resultencrypt);
+        System.out.println("Blowfish Decrypt Result: " + Strings.fromUTF8ByteArray(resultdecrypt));
+        Assert.assertEquals(DATA, Strings.fromUTF8ByteArray(resultdecrypt));
+	}
+    
+    @Test
+    public void testDES() throws Exception {
+        final String DATA = "Four score and seven years ago.";
+        final byte[] KEY = "thisisak".getBytes();
+        
         byte[] resultencrypt = doCryptDES(true, KEY, Strings.toUTF8ByteArray(DATA));
         System.out.println("DES Encrypt Result: " + resultencrypt.toString());
         
         byte[] resultdecrypt = doCryptDES(false, KEY, resultencrypt);
         System.out.println("DES Decrypt Result: " + Strings.fromUTF8ByteArray(resultdecrypt));
-	}
+        Assert.assertEquals(DATA, Strings.fromUTF8ByteArray(resultdecrypt));
+    }
 
     public static byte[] doCryptBlowfish(boolean encrypt, byte[] key, byte[] data) throws InvalidCipherTextException {
         BufferedBlockCipher cipher = new PaddedBlockCipher(

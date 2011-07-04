@@ -9,7 +9,10 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.PBEKeySpec;
 
+import junit.framework.Assert;
+
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.junit.Test;
 
 /**
  * Use the standard JCE classes for crypto but with the BouncyCastle
@@ -22,17 +25,17 @@ public class ExamplePBE {
     private static final int keyLength = 256;
     private static final SecureRandom random = new SecureRandom();
     
-    //IvParameterSpec ivspec = generateIV
+    static final String PASSPHRASE = "MySup3rSecRe7Pa$$";
+    static final String PLAINTEXT = "Four scor and seven years ago.";
 
-    public static void main(String [] args) throws Exception {
+    @Test
+    public void test() throws Exception {
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
 
-        String passphrase = "MySup3rSecRe7Pa$$";
-        String plaintext = "Four scor and seven years ago.";
-        byte [] ciphertext = encrypt(passphrase, plaintext);
-        String recoveredPlaintext = decrypt(passphrase, ciphertext);
-
-        System.out.println(recoveredPlaintext);
+        byte [] ciphertext = encrypt(PASSPHRASE, PLAINTEXT);
+        String decryptedPlaintext = decrypt(PASSPHRASE, ciphertext);
+        System.out.println("Decrypted plaintext: " + decryptedPlaintext);
+        Assert.assertEquals(PLAINTEXT, decryptedPlaintext);
     }
 
     private static byte [] encrypt(String passphrase, String plaintext) throws Exception {

@@ -16,8 +16,8 @@ public class TestBCDES
 	@Test
     public void testBCDES() throws Exception {
 	    byte[] plaintextOriginal = Strings.toUTF8ByteArray(DATA);
-	    byte[] ciphertext = ExampleBCDES.doCryptDES(true, KEY, Strings.toUTF8ByteArray(DATA));
-	    byte[] plaintextDecrypted = ExampleBCDES.doCryptDES(false, KEY, ciphertext);
+	    byte[] ciphertext = TestBCBlowfishAndDESDirectClasses.doCryptDES(true, KEY, Strings.toUTF8ByteArray(DATA));
+	    byte[] plaintextDecrypted = TestBCBlowfishAndDESDirectClasses.doCryptDES(false, KEY, ciphertext);
 	    String plaintextOriginalString = Strings.fromUTF8ByteArray(plaintextOriginal);
 	    String plaintextDecryptedString = Strings.fromUTF8ByteArray(plaintextDecrypted);
 	    
@@ -30,8 +30,8 @@ public class TestBCDES
     @Test
     public void testBCBlowfish() throws Exception {
         byte[] plaintextOriginal = Strings.toUTF8ByteArray(DATA);
-        byte[] ciphertext = ExampleBCDES.doCryptBlowfish(true, KEY, Strings.toUTF8ByteArray(DATA));
-        byte[] plaintextDecrypted = ExampleBCDES.doCryptBlowfish(false, KEY, ciphertext);
+        byte[] ciphertext = TestBCBlowfishAndDESDirectClasses.doCryptBlowfish(true, KEY, Strings.toUTF8ByteArray(DATA));
+        byte[] plaintextDecrypted = TestBCBlowfishAndDESDirectClasses.doCryptBlowfish(false, KEY, ciphertext);
         String plaintextOriginalString = Strings.fromUTF8ByteArray(plaintextOriginal);
         String plaintextDecryptedString = Strings.fromUTF8ByteArray(plaintextDecrypted);
         
