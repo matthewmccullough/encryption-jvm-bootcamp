@@ -18,7 +18,7 @@ import org.junit.Test;
  * Use the standard JCE classes for crypto but with the BouncyCastle
  * provider providing the AES algorithm with CTR (counter) mode and no padding.
  */
-public class ExamplePBE {
+public class TestExampleBCPBEViaJCE {
 
     private static final String salt = "Use this phrase as the input to salt the encryption (should be random)";
     private static final int iterations = 2000;
