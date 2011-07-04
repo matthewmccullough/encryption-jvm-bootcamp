@@ -5,9 +5,9 @@
   <parent>
     <groupId>com.ambientideas.cryptography</groupId>
     <artifactId>crypto-samples</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
 
-  <artifactId>rsa-simple-algorithm</artifactId>
-  <name>rsa-simple-algorithm</name>
+  <artifactId>homegrown-rsa-simple-algorithm</artifactId>
+  <name>homegrown-rsa-simple-algorithm</name>
 </project>
