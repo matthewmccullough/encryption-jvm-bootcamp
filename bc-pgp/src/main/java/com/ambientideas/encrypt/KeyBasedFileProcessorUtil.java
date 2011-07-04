@@ -86,12 +86,12 @@ public class KeyBasedFileProcessorUtil
         //
         // iterate through the key rings.
         //
-        Iterator rIt = pgpPub.getKeyRings();
+        Iterator<?> rIt = pgpPub.getKeyRings();
         
         while (rIt.hasNext())
         {
             PGPPublicKeyRing    kRing = (PGPPublicKeyRing)rIt.next();    
-            Iterator                        kIt = kRing.getPublicKeys();
+            Iterator<?>                        kIt = kRing.getPublicKeys();
             
             while (kIt.hasNext())
             {
@@ -166,7 +166,7 @@ public class KeyBasedFileProcessorUtil
         //
         // find the secret key
         //
-        Iterator                    it = enc.getEncryptedDataObjects();
+        Iterator <?>                   it = enc.getEncryptedDataObjects();
         PGPPrivateKey               sKey = null;
         PGPPublicKeyEncryptedData   pbe = null;
         PGPSecretKeyRingCollection  pgpSec = new PGPSecretKeyRingCollection(

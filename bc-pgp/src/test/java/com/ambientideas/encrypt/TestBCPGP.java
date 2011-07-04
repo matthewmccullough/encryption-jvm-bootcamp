@@ -12,10 +12,8 @@ import junit.framework.Assert;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openpgp.PGPPublicKey;
-import org.junit.Ignore;
+import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
-
-import sun.misc.BASE64Encoder;
 
 /*
  * Use the Bouncy Castle implementation of PGP to encrypt a file with an
@@ -27,14 +25,12 @@ import sun.misc.BASE64Encoder;
 public class TestBCPGP
 {
     public static String EXPECTED_PUBKEY =
-        "mI0ETYfxUAEEAJpIb1uamFr2RaNjdDCR+FHwNMFpCKkGw0ElPzzjXLv3ZYzZwnnRDt/QyiHXLdnw\n"+
-        "5K5GuFi1EZVK/pFLLWoyUXzWse5o8rKanBGWTFYV7jtXDNZ3Q1bAbn3WwSiNviAxQdDmECZgXYEE\n"+
-        "z4kKwNkUBKsNA4SIpwzA6U8c/hXpqscDABEBAAG0DG1hdHRoZXdsb2NhbIicBBABAgAGBQJNh/FQ\n"+
-        "AAoJENOHrqRHDNUD/8wD/0HiirtSgm2O6WdZseWgPaG/ue/DBY3hsHx7ZMu2ic5wW8I2XE2BmWF4\n"+
-        "PzOCcV9I9Al6BoOoep52pOTnIsY+dROTETjw/QmcN+G9xhyJMwwTfB4zfKtrnfCXaNngYKmJUY7W\n"+
-        "fN5/ydEUanlXTNGh76SrMYAFTKVd4bpn3EVywyuc";
-    @SuppressWarnings("restriction")
-    public static BASE64Encoder b64e = new sun.misc.BASE64Encoder();
+        "mI0ETYfxUAEEAJpIb1uamFr2RaNjdDCR+FHwNMFpCKkGw0ElPzzjXLv3ZYzZwnnRDt/QyiHXLdnw"+
+        "5K5GuFi1EZVK/pFLLWoyUXzWse5o8rKanBGWTFYV7jtXDNZ3Q1bAbn3WwSiNviAxQdDmECZgXYEE"+
+        "z4kKwNkUBKsNA4SIpwzA6U8c/hXpqscDABEBAAG0DG1hdHRoZXdsb2NhbIicBBABAgAGBQJNh/FQ"+
+        "AAoJENOHrqRHDNUD/8wD/0HiirtSgm2O6WdZseWgPaG/ue/DBY3hsHx7ZMu2ic5wW8I2XE2BmWF4"+
+        "PzOCcV9I9Al6BoOoep52pOTnIsY+dROTETjw/QmcN+G9xhyJMwwTfB4zfKtrnfCXaNngYKmJUY7W"+
+        "fN5/ydEUanlXTNGh76SrMYAFTKVd4bpn3EVywyuc";    
     
     @Test
    // @Ignore //Doesn't return the expected provider unless explicitly requested with BC as the 2nd param
@@ -56,8 +52,7 @@ public class TestBCPGP
         Cipher cipherBCRSA = Cipher.getInstance("RSA/ECB/PKCS1Padding","BC");
         Assert.assertEquals("BC version 1.45", cipherBCRSA.getProvider().toString());
     }
-    
-	@SuppressWarnings("restriction")
+
     @Test
     public void testBCPGP() throws Exception {
         //Register Bouncy Castle JCE provider
@@ -66,7 +61,7 @@ public class TestBCPGP
         //Load Public Key File
         FileInputStream pubKeyIn = new FileInputStream("src/main/resources/keys/pub.bpg");
         PGPPublicKey pubKey = KeyBasedFileProcessorUtil.readPublicKey(pubKeyIn);
-        Assert.assertEquals(EXPECTED_PUBKEY, b64e.encode(pubKey.getEncoded()));
+        Assert.assertEquals(EXPECTED_PUBKEY, new String(Base64.encode(pubKey.getEncoded())));
         
         //Output file
         FileOutputStream out = new FileOutputStream("target/encrypted1.bpg");
@@ -86,7 +81,6 @@ public class TestBCPGP
         KeyBasedFileProcessorUtil.decryptFile(encryptedFileIn, privKeyIn, "123456789".toCharArray(), "", "target/");
     }
 	
-	@SuppressWarnings("restriction")
     @Test(expected=org.bouncycastle.openpgp.PGPException.class)
     public void testBCPGPNotRightPassword() throws Exception {
         //Register Bouncy Castle JCE provider
@@ -95,7 +89,7 @@ public class TestBCPGP
         //Load Public Key File
         FileInputStream pubKeyIn = new FileInputStream("src/main/resources/keys/pub.bpg");
         PGPPublicKey pubKey = KeyBasedFileProcessorUtil.readPublicKey(pubKeyIn);
-        Assert.assertEquals(EXPECTED_PUBKEY, b64e.encode(pubKey.getEncoded()));
+        Assert.assertEquals(EXPECTED_PUBKEY, new String(Base64.encode(pubKey.getEncoded())));
         
         //Output file
         FileOutputStream out = new FileOutputStream("target/encrypted2.bpg");
