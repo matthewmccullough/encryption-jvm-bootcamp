@@ -1,6 +1,5 @@
 package com.ambientideas.saltedpassword;
 
-import org.apache.commons.logging.Log;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 
