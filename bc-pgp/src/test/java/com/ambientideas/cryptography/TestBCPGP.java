@@ -1,4 +1,4 @@
-package com.ambientideas.encrypt;
+package com.ambientideas.cryptography;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -14,6 +14,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openpgp.PGPPublicKey;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.Test;
+
+import com.ambientideas.cryptography.KeyBasedFileProcessorUtil;
 
 /*
  * Use the Bouncy Castle implementation of PGP to encrypt a file with an

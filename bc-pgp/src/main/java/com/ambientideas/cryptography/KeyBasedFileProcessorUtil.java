@@ -1,4 +1,4 @@
-package com.ambientideas.encrypt;
+package com.ambientideas.cryptography;
 
 import org.bouncycastle.bcpg.ArmoredOutputStream;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
