@@ -11,9 +11,11 @@ import java.util.Scanner;
  */
 public class DelayLogin 
 {
-  public static void main( String[] args ) throws IOException, InterruptedException {
+  @SuppressWarnings("unchecked")
+public static void main( String[] args ) throws IOException, InterruptedException {
 	//Static map for username and incorrect login attempts
-	Map wrongLoginAttemps = new HashMap();
+	@SuppressWarnings("rawtypes")
+    Map wrongLoginAttemps = new HashMap();
 	wrongLoginAttemps.put("matthewm", new Integer(0));
 	
 	boolean loginSuccess = false;
