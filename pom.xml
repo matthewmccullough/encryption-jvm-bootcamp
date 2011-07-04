@@ -3,7 +3,8 @@
   
   <groupId>com.ambientideas.cryptography</groupId>
   <artifactId>crypto-samples</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.2</version>
+  
   <packaging>pom</packaging>
   <name>encryption-samples-masterproject</name>
   <description>A series of examples that demonstrate encryption on the JVM</description>  
@@ -61,6 +62,8 @@
     <module>bc-symmetric</module>
     <module>delay-as-brute-force-defense</module>
     <module>elliptic-curve</module>
+    <module>homegrown-rsa-simple-algorithm</module>
+    <module>homegrown-salt-on-hibernate</module>
     <module>image-stego</module>
     
     <module>jasypt-hash</module>
@@ -74,14 +77,13 @@
     <module>jce-keystore-symmetric-encrypt</module>
     <!-- jce-keytool-keys - RUN A SHELL SCRIPT -->
     <module>jce-message-digest</module>
+    <module>jce-rsatoecc-headtoheadtest</module>
     <module>jce-symmetric-encrypt</module>
+    
     <!-- <module>jsse-sample-server-sun</module> -->
     <!-- <module>postgresql-encrypt</module> RUN SHELL SCRIPT-->
     <!-- <module>keyczar-examples</module> RUN SHELL SCRIPT-->
     <!-- <module>postgresql-encrypt</module> RUN SHELL SCRIPT-->
-    <module>rsa-simple-algorithm</module>
-    <module>rsatoecc-headtoheadtest</module>
-    <module>salt-on-hibernate</module>
     <module>secure-random</module>
     <!-- <module>simple-rot</module> -->
     <!-- <module>squid-filter</module> SHELL SCRIPT or WebDriver-->
