@@ -1,0 +1,25 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+	<bean id="cryptBean" class="com.ambientideas.cryptography.DemoCrypt">
+		<property name="socialSecurityNumber" value="234125678" />
+	</bean>
+
+    <!-- All digesters and encryptors in jasypt are thread-safe, which means that they can be
+      safely treated as singletons, the default behaviour of Spring's bean container.
+      This avoids concurrency problems in multi-threaded environments like web applications. -->
+	<bean id="strongEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="algorithm">
+			<value>PBEWithMD5AndTripleDES</value>
+		</property>
+		<property name="password">
+			<value>jasypt</value>
+		</property>
+		<property name="keyObtentionIterations">
+            <value>15</value>
+        </property>
+	</bean>
+
+</beans>
