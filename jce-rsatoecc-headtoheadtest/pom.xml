@@ -9,7 +9,6 @@
   </parent>
 
   <artifactId>jce-rsatoecc-headtoheadtest</artifactId>
-  <name>jce-rsatoecc-headtoheadtest</name>
 
   <dependencies>
     <dependency>

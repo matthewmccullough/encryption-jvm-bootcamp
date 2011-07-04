@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>bc-symmetric</artifactId>
-  <name>Bouncy Castle Symmetric Encryption</name>
+  <description>Bouncy Castle Symmetric Encryption</description>
 
   <dependencies>
     <dependency>

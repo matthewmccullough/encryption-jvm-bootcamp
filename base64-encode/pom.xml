@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>base64-encode</artifactId>
-	<name>BASE64 Encoding Example</name>
 	<description>Demonstrate the difference between the non-portable com.sun BASE64 encoders and the ones from Apache Commons IO</description>
 
 	<dependencies>

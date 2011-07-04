@@ -5,11 +5,10 @@
   <parent>
     <groupId>com.ambientideas.cryptography</groupId>
     <artifactId>crypto-samples</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
   
-  <artifactId>steganography</artifactId>
-  <name>steganography</name>
+  <artifactId>homegrown-image-steganography</artifactId>
   <url>http://www.dreamincode.net/forums/topic/27950-steganography/</url>
   
   <build>

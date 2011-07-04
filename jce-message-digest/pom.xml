@@ -5,9 +5,8 @@
   <parent>
     <groupId>com.ambientideas.cryptography</groupId>
     <artifactId>crypto-samples</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2</version>
   </parent>
   
   <artifactId>jce-message-digest</artifactId>
-  <name>jce-message-digest</name>
 </project>

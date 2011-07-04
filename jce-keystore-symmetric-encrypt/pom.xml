@@ -17,5 +17,4 @@
   </dependencies>
 
   <artifactId>jce-keystore-symmetric-encrypt</artifactId>
-  <name>jce-keystore-symmetric-encrypt</name>
 </project>

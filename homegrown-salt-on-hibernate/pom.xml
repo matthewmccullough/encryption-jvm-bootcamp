@@ -9,7 +9,6 @@
   </parent>
   
   <artifactId>homegrown-salt-on-hibernate</artifactId>
-  <name>Salt On Hibernate</name>
   
   <dependencies>
     <dependency>

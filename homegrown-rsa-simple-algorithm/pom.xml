@@ -9,5 +9,4 @@
   </parent>
 
   <artifactId>homegrown-rsa-simple-algorithm</artifactId>
-  <name>homegrown-rsa-simple-algorithm</name>
 </project>

@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>bc-pgp</artifactId>
-  <name>Bouncy Castle Open PGP</name>
+  <description>Bouncy Castle Open PGP</description>
 
   <dependencies>
     <dependency>

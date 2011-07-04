@@ -9,7 +9,6 @@
   </parent>
 
   <artifactId>jce-flexiprovider-elliptic-curve</artifactId>
-  <name>jce-flexiprovider-elliptic-curve</name>
 
   <dependencies>
     <dependency>
