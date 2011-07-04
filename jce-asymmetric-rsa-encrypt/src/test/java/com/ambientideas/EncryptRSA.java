@@ -15,7 +15,8 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
+import org.junit.Test;
 
 /**
  * Use the SecureRandom java security class to generate
@@ -23,7 +24,8 @@ import sun.misc.BASE64Encoder;
  */
 public class EncryptRSA 
 {
-  public static void main( String[] args ) throws NoSuchAlgorithmException, NoSuchProviderException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
+    @Test
+  public void testEncryptRSA() throws NoSuchAlgorithmException, NoSuchProviderException, IOException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException
   {
     final String message1 = "Four score and seven years ago";
     
@@ -44,8 +46,7 @@ public class EncryptRSA
     Cipher rsa = Cipher.getInstance("RSA/ECB/PKCS1Padding");
     rsa.init(Cipher.ENCRYPT_MODE, pubKey);
     byte[] encryptedBytes = rsa.doFinal(message1.getBytes("UTF8"));
-    BASE64Encoder b64e = new sun.misc.BASE64Encoder();
-    String base64Encrypted = b64e.encode(encryptedBytes);
+    String base64Encrypted = Base64.encodeBase64String(encryptedBytes);
     System.out.println("Encrypted text: " + base64Encrypted);
     
     //Decrypt using the private key
