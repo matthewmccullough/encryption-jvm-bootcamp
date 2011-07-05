@@ -1,4 +1,4 @@
-package com.ambientideas;
+package com.ambientideas.cryptography;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -12,10 +12,9 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Assert;
 import org.junit.Test;
-
-import sun.misc.BASE64Encoder;
 
 public class TestSymmetricEncryptDESEDE
 {
@@ -28,11 +27,10 @@ public class TestSymmetricEncryptDESEDE
     NoSuchPaddingException, InvalidKeyException,
     IllegalBlockSizeException, BadPaddingException, UnsupportedEncodingException
     { 
-        BASE64Encoder b64e = new sun.misc.BASE64Encoder();
         final KeyGenerator keyGen = KeyGenerator.getInstance("DESede");
         keyGen.init(168);
         final SecretKey desKey = keyGen.generateKey();
-        System.out.println("The DES key: " + b64e.encode(desKey.getEncoded()));
+        System.out.println("The DES key: " + Base64.encodeBase64String(desKey.getEncoded()));
 
         final Cipher desCipher = Cipher.getInstance("DESede/ECB/PKCS5Padding");
 
@@ -41,8 +39,8 @@ public class TestSymmetricEncryptDESEDE
         byte[] clearText = MESSAGE.getBytes("UTF8");
         byte[] encryptedBytesFirstTime = desCipher.doFinal(clearText);
         byte[] encryptedBytesSecondTime = desCipher.doFinal(clearText);
-        String base64EncryptedFirstTime = b64e.encode(encryptedBytesFirstTime);
-        String base64EncryptedSecondTime = b64e.encode(encryptedBytesSecondTime);
+        String base64EncryptedFirstTime = Base64.encodeBase64String(encryptedBytesFirstTime);
+        String base64EncryptedSecondTime = Base64.encodeBase64String(encryptedBytesSecondTime);
         System.out.println("Encrypted text: " + base64EncryptedFirstTime);
         Assert.assertEquals("Encrypting the same text with the same key should yield the same text",base64EncryptedSecondTime, base64EncryptedFirstTime);
 

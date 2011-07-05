@@ -13,6 +13,10 @@ import javax.crypto.Cipher;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 
+import junit.framework.Assert;
+
+import org.junit.Test;
+
 import de.flexiprovider.common.ies.IESParameterSpec;
 import de.flexiprovider.core.FlexiCoreProvider;
 import de.flexiprovider.ec.FlexiECProvider;
@@ -28,10 +32,10 @@ import de.flexiprovider.ec.parameters.CurveRegistry.BrainpoolP160r1;
  * http://www.cdc.informatik.tu-darmstadt.de/flexiprovider/download.html
  */
 
-public class ExampleECIES {
+public class TestJCEFlexiproviderECC {
 
-	public static void main(String[] args) throws Exception {
-
+    @Test
+	public void testECC() throws Exception {
 		//Dynamically add the FlexiCore JCE providers
 		Security.addProvider(new FlexiCoreProvider());
 		Security.addProvider(new FlexiECProvider());
@@ -63,6 +67,7 @@ public class ExampleECIES {
 
 		byte[] block = new byte[64];
 		FileInputStream fis = new FileInputStream(cleartextFile);
+		Assert.assertNotNull(fis);
 		FileOutputStream fos = new FileOutputStream(ciphertextFile);
 		CipherOutputStream cos = new CipherOutputStream(fos, cipher);
 
@@ -76,6 +81,7 @@ public class ExampleECIES {
 		cipher.init(Cipher.DECRYPT_MODE, privKey, iesParams);
 
 		fis = new FileInputStream(ciphertextFile);
+		Assert.assertNotNull(fis);
 		CipherInputStream cis = new CipherInputStream(fis, cipher);
 		fos = new FileOutputStream(cleartextAgainFile);
 

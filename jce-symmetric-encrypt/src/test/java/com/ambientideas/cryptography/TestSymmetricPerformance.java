@@ -1,4 +1,4 @@
-package com.ambientideas;
+package com.ambientideas.cryptography;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -14,9 +14,8 @@ import javax.crypto.SecretKey;
 
 import junit.framework.Assert;
 
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
-
-import sun.misc.BASE64Encoder;
 
 /**
  * Unit test for simple App.
@@ -82,12 +81,10 @@ public class TestSymmetricPerformance
         long afterAES = java.lang.System.currentTimeMillis();
         long time = afterAES - beforeAES;
 
-        BASE64Encoder b64e = new sun.misc.BASE64Encoder();
-        String base64Encrypted = b64e.encode(encryptedBytes);
-
+        String base64Encrypted = Base64.encodeBase64String(encryptedBytes);
+        Assert.assertEquals(46, base64Encrypted.length());
 //        System.out.println("Encrypted text: " + base64Encrypted);
 //        System.out.println("AES encryption at bitstrength " + bitStrength + " took: " + time + "ms");
-
 
         //////////////////////////////////////
         //Put the cipher in decryption mode

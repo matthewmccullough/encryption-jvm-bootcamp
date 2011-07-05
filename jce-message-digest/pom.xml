@@ -8,6 +8,8 @@
 		<version>1.0.2</version>
 	</parent>
 
+	<artifactId>jce-message-digest</artifactId>
+
 	<dependencies>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -15,6 +17,4 @@
 			<version>1.4</version>
 		</dependency>
 	</dependencies>
-
-	<artifactId>jce-message-digest</artifactId>
 </project>
