@@ -1,10 +1,11 @@
 package com.ambientideas.encrypt;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.security.Provider;
 import java.security.Security;
 
 import junit.framework.Assert;
@@ -16,7 +17,6 @@ import org.bouncycastle.util.Strings;
 import org.bouncycastle.util.encoders.Base64;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Test the BouncyCastle SHA512 implementation
@@ -29,15 +29,12 @@ public class TestBCSimpleDigest
     public static String WHIRLPOOL_DIGEST_KNOWN_RESULT = "Vp47q36YdKmVYHgVZ5MpLPJWbc829DPJ5TevTrt5Bu6IyZ7OcCyc/dNte1rt5KqrG7yAOBttItL2"
         +"PO026bGh0w==";
     
-    @SuppressWarnings("restriction")
-    
     @BeforeClass
     public static void loadBCProvider() {
         //Register Bouncy Castle JCE provider at the end of the list
         Security.addProvider(new BouncyCastleProvider());
     }
     
-	@SuppressWarnings("restriction")
     @Test
     public void testBCHashDirectAPI() throws Exception {
 	    byte[] utf8ByteArrayData = Strings.toUTF8ByteArray(DATA);
@@ -56,7 +53,6 @@ public class TestBCSimpleDigest
 	 * Ask for SHA-1 with BouncyCastle at end of provider list. Will get
 	 * the core JCE implementation instead.
 	 */
-	@SuppressWarnings("restriction")
     @Test
 	public void testBCHashJCEAPI() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         //Ask for a algorithm that both SUN and BC have and prove it is BC by the class name
@@ -77,7 +73,6 @@ public class TestBCSimpleDigest
      * Ask for SHA-1 with BouncyCastle at end of provider list. Will get
      * the core JCE implementation instead.
      */
-    @SuppressWarnings("restriction")
     @Test
     public void testBCHashWhirlpoolJCEAPI() throws NoSuchAlgorithmException, UnsupportedEncodingException {
         //Register Bouncy Castle JCE provider at the beginning of the provider list
@@ -101,7 +96,6 @@ public class TestBCSimpleDigest
      * Ask for SHA-1 with BouncyCastle at end of provider list. Will get
      * the core JCE implementation.
      */
-    @SuppressWarnings("restriction")
     @Test
     public void testSHA1HashJCEProvider() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
         //Ask for a algorithm that both SUN and BC have and prove it is JCE by the class name
@@ -122,7 +116,6 @@ public class TestBCSimpleDigest
      * qualified by the "BC" provider sub-name, we will get the BC implemented as
      * expected.
      */
-    @SuppressWarnings("restriction")
     @Test
     public void testSHA1HashBCProviderDirectly() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
         //Ask for a algorithm that both SUN and BC have and prove it is BC by the class name
@@ -142,7 +135,6 @@ public class TestBCSimpleDigest
      * Ask for SHA-1 with BouncyCastle at front of provider list. We will get the BC implemented as
      * expected.
      */
-    @SuppressWarnings("restriction")
     @Test
     public void testSHA1HashBCProvider() throws NoSuchAlgorithmException, UnsupportedEncodingException, NoSuchProviderException {
         //Since BC was already registered in the startup of the test harness, we must remove it before re-adding
@@ -171,6 +163,7 @@ public class TestBCSimpleDigest
     
     @Test(expected=NoSuchAlgorithmException.class)
     public void testBCAlgorithmNotFound() throws NoSuchAlgorithmException {
+        @SuppressWarnings("unused")
         MessageDigest sha = MessageDigest.getInstance("SHA9999");
     }
 }

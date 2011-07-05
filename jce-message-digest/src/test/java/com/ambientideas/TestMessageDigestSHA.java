@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.commons.codec.binary.Base64;
+
 /**
  * Digest a string message via SHA1.
  * 
@@ -47,7 +49,7 @@ public class TestMessageDigestSHA
     MessageDigest sha = MessageDigest.getInstance("SHA-1");
     
     byte[] digest = sha.digest(message.getBytes("UTF8"));
-    return new sun.misc.BASE64Encoder().encode(digest);
+    return Base64.encodeBase64String(digest);
   }
   
   /**
