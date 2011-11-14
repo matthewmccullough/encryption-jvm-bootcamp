@@ -25,7 +25,7 @@ public class TestSecureRandomNumber {
 
     @Test
     public void test10000Random() throws NoSuchAlgorithmException {
-        int iterations = 10000;
+        int iterations = 1000000;
 
         javaUtilRandom(iterations);
         javaSecureRandomPRNG(iterations);
