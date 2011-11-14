@@ -26,7 +26,7 @@ public class TestExampleBCPBEViaJCE {
     private static final SecureRandom random = new SecureRandom();
     
     static final String PASSPHRASE = "MySup3rSecRe7Pa$$";
-    static final String PLAINTEXT = "Four scor and seven years ago.";
+    static final String PLAINTEXT = "Four score and seven years ago.";
 
     @Test
     public void test() throws Exception {
